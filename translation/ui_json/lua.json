@@ -1,0 +1,2852 @@
+{
+ "schema": "tt1-ui/1",
+ "source": "psp/script/lua/**/*.lua",
+ "note": "menu and system messages; literals are string.char()-encoded",
+ "count": 316,
+ "entries": [
+  {
+   "id": "continue.lua@6727",
+   "file": "psp/script/lua/continue.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "ゲームを[続/つづ]けますか？",
+   "ko": "게임을 계속하시겠습니까?"
+  },
+  {
+   "id": "continue.lua@6768",
+   "file": "psp/script/lua/continue.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "continue.lua@6776",
+   "file": "psp/script/lua/continue.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "continue.lua@7399",
+   "file": "psp/script/lua/continue.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "セーブせずにゲームを[終了/しゅうりょう]しますか？",
+   "ko": "저장하지 않고 게임을 종료하시겠습니까?"
+  },
+  {
+   "id": "continue.lua@7462",
+   "file": "psp/script/lua/continue.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "continue.lua@7470",
+   "file": "psp/script/lua/continue.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "continue.lua@7839",
+   "file": "psp/script/lua/continue.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "ゲームを[続/つづ]けますか？",
+   "ko": "게임을 계속하시겠습니까?"
+  },
+  {
+   "id": "continue.lua@7880",
+   "file": "psp/script/lua/continue.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "continue.lua@7888",
+   "file": "psp/script/lua/continue.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "continue.lua@8324",
+   "file": "psp/script/lua/continue.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "セーブせずにゲームを[終了/しゅうりょう]しますか？",
+   "ko": "저장하지 않고 게임을 종료하시겠습니까?"
+  },
+  {
+   "id": "continue.lua@8387",
+   "file": "psp/script/lua/continue.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "continue.lua@8395",
+   "file": "psp/script/lua/continue.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "end_game.lua@3147",
+   "file": "psp/script/lua/end_game.lua",
+   "form": "char",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "「タイムトラベラーズフォン（ＴＴフォン）」を\\\\n[遊/あそ]べるようになりました！\\\\nクリアデータをロードするとモードを[選択/せんたく]できます。",
+   "ko": "『타임 트래블러즈 폰(TT폰)』을\\\\n즐길 수 있게 되었습니다!\\\\n클리어 데이터를 불러오면 모드를 선택할 수 있습니다."
+  },
+  {
+   "id": "end_game.lua@4107",
+   "file": "psp/script/lua/end_game.lua",
+   "form": "char",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "「アバンタイトル＆[予告編/よこくへん]リスト」が\\\\n[解放/かいほう]されました！\\\\nゲーム[中/ちゅう]のメインメニューから[見/み]ることができます。",
+   "ko": "『아방 타이틀＆예고편 목록』이\\\\n해방되었습니다!\\\\n게임 중 메인 메뉴에서 볼 수 있습니다."
+  },
+  {
+   "id": "end_game.lua@5160",
+   "file": "psp/script/lua/end_game.lua",
+   "form": "char",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "「[裏話/うらばなし]（コメンタリー）」[系/けい]ＴＩＰＳが[解放/かいほう]されました！\\\\nＴＩＰＳは、[物語/ものがたり]の[至/いた]る[所/ところ]に[隠/かく]されています。\\\\nクリアデータをロードして[探/さが]してみましょう。",
+   "ko": "『비화(코멘터리)』 계열 TIPS가 해방되었습니다!\\\\nTIPS는 이야기 곳곳에 숨겨져 있습니다.\\\\n클리어 데이터를 불러와 찾아보세요."
+  },
+  {
+   "id": "end_game.lua@7246",
+   "file": "psp/script/lua/end_game.lua",
+   "form": "char",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "セーブせずにタイトルへ[戻/もど]りますか？",
+   "ko": "저장하지 않고 타이틀로 돌아가시겠습니까?"
+  },
+  {
+   "id": "end_game.lua@7475",
+   "file": "psp/script/lua/end_game.lua",
+   "form": "char",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "end_game.lua@7509",
+   "file": "psp/script/lua/end_game.lua",
+   "form": "char",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "on_memory_tts.lua@6388",
+   "file": "psp/script/lua/on_memory_tts.lua",
+   "form": "char",
+   "caller": "?",
+   "drawn": true,
+   "ja": "１５：００へつづく",
+   "ko": "１５：００으로 계속"
+  },
+  {
+   "id": "on_memory_tts.lua@6530",
+   "file": "psp/script/lua/on_memory_tts.lua",
+   "form": "char",
+   "caller": "?",
+   "drawn": true,
+   "ja": "１６：００へつづく",
+   "ko": "１６：００으로 계속"
+  },
+  {
+   "id": "on_memory_tts.lua@6672",
+   "file": "psp/script/lua/on_memory_tts.lua",
+   "form": "char",
+   "caller": "?",
+   "drawn": true,
+   "ja": "１７：００へつづく",
+   "ko": "１７：００으로 계속"
+  },
+  {
+   "id": "on_memory_tts.lua@6814",
+   "file": "psp/script/lua/on_memory_tts.lua",
+   "form": "char",
+   "caller": "?",
+   "drawn": true,
+   "ja": "１８：００へつづく",
+   "ko": "１８：００으로 계속"
+  },
+  {
+   "id": "on_memory_tts.lua@6956",
+   "file": "psp/script/lua/on_memory_tts.lua",
+   "form": "char",
+   "caller": "?",
+   "drawn": true,
+   "ja": "１９：００へつづく",
+   "ko": "１９：００으로 계속"
+  },
+  {
+   "id": "on_memory_tts.lua@7098",
+   "file": "psp/script/lua/on_memory_tts.lua",
+   "form": "char",
+   "caller": "?",
+   "drawn": true,
+   "ja": "タイムトラベラー[編/へん]へつづく",
+   "ko": "타임 트래블러 편으로 계속"
+  },
+  {
+   "id": "on_memory_tts.lua@7409",
+   "file": "psp/script/lua/on_memory_tts.lua",
+   "form": "char",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "セーブしますか？",
+   "ko": "저장하시겠습니까?"
+  },
+  {
+   "id": "on_memory_tts.lua@7513",
+   "file": "psp/script/lua/on_memory_tts.lua",
+   "form": "char",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "on_memory_tts.lua@7547",
+   "file": "psp/script/lua/on_memory_tts.lua",
+   "form": "char",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "phone.lua@3818",
+   "file": "psp/script/lua/phone.lua",
+   "form": "quote",
+   "caller": "Msg_SetString",
+   "drawn": true,
+   "ja": "セーブ[中/ちゅう]",
+   "ko": "저장 중"
+  },
+  {
+   "id": "camera.lua@1572",
+   "file": "psp/script/lua/menu/camera.lua",
+   "form": "quote",
+   "caller": "format",
+   "drawn": false,
+   "ja": "カメラ座標　: %f, %f, %f",
+   "ko": ""
+  },
+  {
+   "id": "camera.lua@1648",
+   "file": "psp/script/lua/menu/camera.lua",
+   "form": "quote",
+   "caller": "format",
+   "drawn": false,
+   "ja": "カメラ参照点: %f, %f, %f",
+   "ko": ""
+  },
+  {
+   "id": "menu_avantlist.lua@2013",
+   "file": "psp/script/lua/menu/menu_avantlist.lua",
+   "form": "char",
+   "caller": "?",
+   "drawn": true,
+   "ja": "アバンタイトル",
+   "ko": "아방 타이틀"
+  },
+  {
+   "id": "menu_avantlist.lua@2103",
+   "file": "psp/script/lua/menu/menu_avantlist.lua",
+   "form": "char",
+   "caller": "?",
+   "drawn": true,
+   "ja": "[予告/よこく]／１５：００",
+   "ko": "예고／１５：００"
+  },
+  {
+   "id": "menu_avantlist.lua@2248",
+   "file": "psp/script/lua/menu/menu_avantlist.lua",
+   "form": "char",
+   "caller": "?",
+   "drawn": true,
+   "ja": "[予告/よこく]／１６：００",
+   "ko": "예고／１６：００"
+  },
+  {
+   "id": "menu_avantlist.lua@2393",
+   "file": "psp/script/lua/menu/menu_avantlist.lua",
+   "form": "char",
+   "caller": "?",
+   "drawn": true,
+   "ja": "[予告/よこく]／１７：００",
+   "ko": "예고／１７：００"
+  },
+  {
+   "id": "menu_avantlist.lua@2538",
+   "file": "psp/script/lua/menu/menu_avantlist.lua",
+   "form": "char",
+   "caller": "?",
+   "drawn": true,
+   "ja": "[予告/よこく]／１８：００",
+   "ko": "예고／１８：００"
+  },
+  {
+   "id": "menu_avantlist.lua@2683",
+   "file": "psp/script/lua/menu/menu_avantlist.lua",
+   "form": "char",
+   "caller": "?",
+   "drawn": true,
+   "ja": "[予告/よこく]／１９：００",
+   "ko": "예고／１９：００"
+  },
+  {
+   "id": "menu_avantlist.lua@2828",
+   "file": "psp/script/lua/menu/menu_avantlist.lua",
+   "form": "char",
+   "caller": "?",
+   "drawn": true,
+   "ja": "[予告/よこく]／タイムトラベラー[編/へん]",
+   "ko": "예고／타임 트래블러 편"
+  },
+  {
+   "id": "menu_charasel_00.lua@2379",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "１４時",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@2839",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "１５時",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@3299",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "１６時",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@3759",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "１７時",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@4219",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "１８時",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@4662",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "１９時",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@5239",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "５人組",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@12152",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制ルサンチ",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@37286",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@37379",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@37472",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@40233",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@40326",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@40419",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@43195",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@43288",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@43381",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@44970",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@45063",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@45156",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@47857",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@47950",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_00.lua@48043",
+   "file": "psp/script/lua/menu/menu_charasel_00.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_02.lua@9342",
+   "file": "psp/script/lua/menu/menu_charasel_02.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "プレイヤー取得",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_02.lua@9617",
+   "file": "psp/script/lua/menu/menu_charasel_02.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制ルサンチ",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_02.lua@32280",
+   "file": "psp/script/lua/menu/menu_charasel_02.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_02.lua@32373",
+   "file": "psp/script/lua/menu/menu_charasel_02.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_02.lua@32466",
+   "file": "psp/script/lua/menu/menu_charasel_02.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_02.lua@34446",
+   "file": "psp/script/lua/menu/menu_charasel_02.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_02.lua@34539",
+   "file": "psp/script/lua/menu/menu_charasel_02.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_02.lua@34632",
+   "file": "psp/script/lua/menu/menu_charasel_02.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_03.lua@30133",
+   "file": "psp/script/lua/menu/menu_charasel_03.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_03.lua@30226",
+   "file": "psp/script/lua/menu/menu_charasel_03.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_03.lua@30319",
+   "file": "psp/script/lua/menu/menu_charasel_03.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_03.lua@32137",
+   "file": "psp/script/lua/menu/menu_charasel_03.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_03.lua@32230",
+   "file": "psp/script/lua/menu/menu_charasel_03.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_03.lua@32323",
+   "file": "psp/script/lua/menu/menu_charasel_03.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_04.lua@2178",
+   "file": "psp/script/lua/menu/menu_charasel_04.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "ルサンチ、雛、新道・有理、神谷",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_04.lua@10098",
+   "file": "psp/script/lua/menu/menu_charasel_04.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制有理",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_04.lua@28001",
+   "file": "psp/script/lua/menu/menu_charasel_04.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_04.lua@28094",
+   "file": "psp/script/lua/menu/menu_charasel_04.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_04.lua@28187",
+   "file": "psp/script/lua/menu/menu_charasel_04.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_04.lua@30798",
+   "file": "psp/script/lua/menu/menu_charasel_04.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_04.lua@30891",
+   "file": "psp/script/lua/menu/menu_charasel_04.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_04.lua@30984",
+   "file": "psp/script/lua/menu/menu_charasel_04.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_05.lua@9578",
+   "file": "psp/script/lua/menu/menu_charasel_05.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制ルサンチ",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_05.lua@29255",
+   "file": "psp/script/lua/menu/menu_charasel_05.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_05.lua@29348",
+   "file": "psp/script/lua/menu/menu_charasel_05.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_05.lua@29441",
+   "file": "psp/script/lua/menu/menu_charasel_05.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_05.lua@30995",
+   "file": "psp/script/lua/menu/menu_charasel_05.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_05.lua@31088",
+   "file": "psp/script/lua/menu/menu_charasel_05.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_05.lua@31181",
+   "file": "psp/script/lua/menu/menu_charasel_05.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_06.lua@9777",
+   "file": "psp/script/lua/menu/menu_charasel_06.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制ルサンチ",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_06.lua@27597",
+   "file": "psp/script/lua/menu/menu_charasel_06.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_06.lua@27690",
+   "file": "psp/script/lua/menu/menu_charasel_06.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_06.lua@27783",
+   "file": "psp/script/lua/menu/menu_charasel_06.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_06.lua@29285",
+   "file": "psp/script/lua/menu/menu_charasel_06.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_06.lua@29378",
+   "file": "psp/script/lua/menu/menu_charasel_06.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_06.lua@29471",
+   "file": "psp/script/lua/menu/menu_charasel_06.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_07.lua@9644",
+   "file": "psp/script/lua/menu/menu_charasel_07.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制ルサンチ",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_07.lua@26201",
+   "file": "psp/script/lua/menu/menu_charasel_07.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_07.lua@26294",
+   "file": "psp/script/lua/menu/menu_charasel_07.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_07.lua@26387",
+   "file": "psp/script/lua/menu/menu_charasel_07.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_07.lua@28925",
+   "file": "psp/script/lua/menu/menu_charasel_07.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_07.lua@29018",
+   "file": "psp/script/lua/menu/menu_charasel_07.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_07.lua@29111",
+   "file": "psp/script/lua/menu/menu_charasel_07.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_08.lua@9644",
+   "file": "psp/script/lua/menu/menu_charasel_08.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制新道",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_08.lua@28430",
+   "file": "psp/script/lua/menu/menu_charasel_08.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_08.lua@28523",
+   "file": "psp/script/lua/menu/menu_charasel_08.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_08.lua@28616",
+   "file": "psp/script/lua/menu/menu_charasel_08.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_08.lua@30249",
+   "file": "psp/script/lua/menu/menu_charasel_08.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_08.lua@30342",
+   "file": "psp/script/lua/menu/menu_charasel_08.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_08.lua@30435",
+   "file": "psp/script/lua/menu/menu_charasel_08.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_09.lua@7608",
+   "file": "psp/script/lua/menu/menu_charasel_09.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_09.lua@7700",
+   "file": "psp/script/lua/menu/menu_charasel_09.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_09.lua@7792",
+   "file": "psp/script/lua/menu/menu_charasel_09.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_09.lua@10361",
+   "file": "psp/script/lua/menu/menu_charasel_09.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制新道",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_09.lua@27830",
+   "file": "psp/script/lua/menu/menu_charasel_09.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_09.lua@27923",
+   "file": "psp/script/lua/menu/menu_charasel_09.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_09.lua@28016",
+   "file": "psp/script/lua/menu/menu_charasel_09.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_09.lua@29595",
+   "file": "psp/script/lua/menu/menu_charasel_09.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_09.lua@29688",
+   "file": "psp/script/lua/menu/menu_charasel_09.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_09.lua@29781",
+   "file": "psp/script/lua/menu/menu_charasel_09.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_10.lua@9642",
+   "file": "psp/script/lua/menu/menu_charasel_10.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制新道",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_10.lua@26028",
+   "file": "psp/script/lua/menu/menu_charasel_10.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_10.lua@26121",
+   "file": "psp/script/lua/menu/menu_charasel_10.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_10.lua@26214",
+   "file": "psp/script/lua/menu/menu_charasel_10.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_10.lua@28698",
+   "file": "psp/script/lua/menu/menu_charasel_10.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_10.lua@28791",
+   "file": "psp/script/lua/menu/menu_charasel_10.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_10.lua@28884",
+   "file": "psp/script/lua/menu/menu_charasel_10.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_11.lua@9640",
+   "file": "psp/script/lua/menu/menu_charasel_11.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制雛",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_11.lua@26130",
+   "file": "psp/script/lua/menu/menu_charasel_11.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_11.lua@26223",
+   "file": "psp/script/lua/menu/menu_charasel_11.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_11.lua@26316",
+   "file": "psp/script/lua/menu/menu_charasel_11.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_11.lua@28985",
+   "file": "psp/script/lua/menu/menu_charasel_11.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_11.lua@29078",
+   "file": "psp/script/lua/menu/menu_charasel_11.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_11.lua@29171",
+   "file": "psp/script/lua/menu/menu_charasel_11.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_12.lua@2318",
+   "file": "psp/script/lua/menu/menu_charasel_12.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "１４時",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_12.lua@2778",
+   "file": "psp/script/lua/menu/menu_charasel_12.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "１５時",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_12.lua@3238",
+   "file": "psp/script/lua/menu/menu_charasel_12.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "１６時",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_12.lua@3698",
+   "file": "psp/script/lua/menu/menu_charasel_12.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "１７時",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_12.lua@4158",
+   "file": "psp/script/lua/menu/menu_charasel_12.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "１８時",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_12.lua@4601",
+   "file": "psp/script/lua/menu/menu_charasel_12.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "１９時",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_12.lua@12204",
+   "file": "psp/script/lua/menu/menu_charasel_12.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制雛",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_12.lua@27372",
+   "file": "psp/script/lua/menu/menu_charasel_12.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_12.lua@27465",
+   "file": "psp/script/lua/menu/menu_charasel_12.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_12.lua@27558",
+   "file": "psp/script/lua/menu/menu_charasel_12.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_12.lua@30075",
+   "file": "psp/script/lua/menu/menu_charasel_12.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_12.lua@30168",
+   "file": "psp/script/lua/menu/menu_charasel_12.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_12.lua@30261",
+   "file": "psp/script/lua/menu/menu_charasel_12.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_13.lua@9576",
+   "file": "psp/script/lua/menu/menu_charasel_13.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制雛",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_13.lua@24656",
+   "file": "psp/script/lua/menu/menu_charasel_13.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_13.lua@24749",
+   "file": "psp/script/lua/menu/menu_charasel_13.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_13.lua@24842",
+   "file": "psp/script/lua/menu/menu_charasel_13.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_13.lua@26185",
+   "file": "psp/script/lua/menu/menu_charasel_13.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_13.lua@26278",
+   "file": "psp/script/lua/menu/menu_charasel_13.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_13.lua@26371",
+   "file": "psp/script/lua/menu/menu_charasel_13.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_14.lua@19466",
+   "file": "psp/script/lua/menu/menu_charasel_14.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_14.lua@19559",
+   "file": "psp/script/lua/menu/menu_charasel_14.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_14.lua@19652",
+   "file": "psp/script/lua/menu/menu_charasel_14.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_15.lua@10937",
+   "file": "psp/script/lua/menu/menu_charasel_15.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_15.lua@11029",
+   "file": "psp/script/lua/menu/menu_charasel_15.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_15.lua@11121",
+   "file": "psp/script/lua/menu/menu_charasel_15.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_15.lua@19882",
+   "file": "psp/script/lua/menu/menu_charasel_15.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_15.lua@19975",
+   "file": "psp/script/lua/menu/menu_charasel_15.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_15.lua@20068",
+   "file": "psp/script/lua/menu/menu_charasel_15.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_16.lua@19586",
+   "file": "psp/script/lua/menu/menu_charasel_16.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_16.lua@19679",
+   "file": "psp/script/lua/menu/menu_charasel_16.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_16.lua@19772",
+   "file": "psp/script/lua/menu/menu_charasel_16.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_17.lua@2178",
+   "file": "psp/script/lua/menu/menu_charasel_17.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "３人組",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_17.lua@9167",
+   "file": "psp/script/lua/menu/menu_charasel_17.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制有理",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_17.lua@28399",
+   "file": "psp/script/lua/menu/menu_charasel_17.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_17.lua@28492",
+   "file": "psp/script/lua/menu/menu_charasel_17.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_17.lua@28585",
+   "file": "psp/script/lua/menu/menu_charasel_17.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_17.lua@30081",
+   "file": "psp/script/lua/menu/menu_charasel_17.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_17.lua@30174",
+   "file": "psp/script/lua/menu/menu_charasel_17.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_17.lua@30267",
+   "file": "psp/script/lua/menu/menu_charasel_17.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_17.lua@32835",
+   "file": "psp/script/lua/menu/menu_charasel_17.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_17.lua@32928",
+   "file": "psp/script/lua/menu/menu_charasel_17.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_17.lua@33021",
+   "file": "psp/script/lua/menu/menu_charasel_17.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@2178",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "４人組",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@9175",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "強制ルサンチ",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@30725",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@30818",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@30911",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@33577",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@33670",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@33763",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@35278",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@35371",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@35464",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@38091",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Chr_SetMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@38184",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Chr_SetImgMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_charasel_18.lua@38277",
+   "file": "psp/script/lua/menu/menu_charasel_18.lua",
+   "form": "char",
+   "caller": "Chr_SetMtrMotion",
+   "drawn": false,
+   "ja": "立ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_guide3.lua@6504",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "『タイムトラベラーズ』の[遊/あそ]び[方/かた]",
+   "ko": "『타임 트래블러즈』 플레이 방법"
+  },
+  {
+   "id": "menu_guide3.lua@7073",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "ＴＩＰＳとは？",
+   "ko": "ＴＩＰＳ란?"
+  },
+  {
+   "id": "menu_guide3.lua@7492",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[選択肢/せんたくし]とは？",
+   "ko": "선택지란?"
+  },
+  {
+   "id": "menu_guide3.lua@7964",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "ＰＣＥとは？",
+   "ko": "ＰＣＥ란?"
+  },
+  {
+   "id": "menu_guide3.lua@8373",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "タイムストップとは？",
+   "ko": "타임 스톱이란?"
+  },
+  {
+   "id": "menu_guide3.lua@8822",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[他/ほか]の[主人公/しゅじんこう]の[運命/うんめい]への[影響/えいきょう]",
+   "ko": "다른 주인공의 운명에 미치는 영향"
+  },
+  {
+   "id": "menu_guide3.lua@9521",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "タイムトラベルチャートとは？",
+   "ko": "타임 트래블 차트란?"
+  },
+  {
+   "id": "menu_guide3.lua@10010",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "ＴＩＰＳリストとは？",
+   "ko": "ＴＩＰＳ 목록이란?"
+  },
+  {
+   "id": "menu_guide3.lua@10461",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "オートセーブとは？",
+   "ko": "오토 세이브란?"
+  },
+  {
+   "id": "menu_guide3.lua@10902",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "オートプレイとは？",
+   "ko": "오토 플레이란?"
+  },
+  {
+   "id": "menu_guide3.lua@11343",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "スキッププレイとは？",
+   "ko": "스킵 플레이란?"
+  },
+  {
+   "id": "menu_guide3.lua@11794",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "テキストログとは？",
+   "ko": "텍스트 로그란?"
+  },
+  {
+   "id": "menu_guide3.lua@12235",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "タイムトラベルチャート[開放/かいほう]",
+   "ko": "타임 트래블 차트 개방"
+  },
+  {
+   "id": "menu_guide3.lua@12771",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "タイムロックとは？",
+   "ko": "타임 록이란?"
+  },
+  {
+   "id": "menu_guide3.lua@13212",
+   "file": "psp/script/lua/menu/menu_guide3.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "あらすじとは？",
+   "ko": "줄거리란?"
+  },
+  {
+   "id": "menu_load.lua@48911",
+   "file": "psp/script/lua/menu/menu_load.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "このデータをロードしますか？",
+   "ko": "이 데이터를 불러올까요?"
+  },
+  {
+   "id": "menu_load.lua@49065",
+   "file": "psp/script/lua/menu/menu_load.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "menu_load.lua@49099",
+   "file": "psp/script/lua/menu/menu_load.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "menu_load.lua@51733",
+   "file": "psp/script/lua/menu/menu_load.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "データをロードしています。",
+   "ko": "데이터를 불러오는 중입니다."
+  },
+  {
+   "id": "menu_load.lua@52202",
+   "file": "psp/script/lua/menu/menu_load.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[電源/でんげん]をＯＦＦにしないでください。",
+   "ko": "전원을 끄지 마세요."
+  },
+  {
+   "id": "menu_load.lua@54297",
+   "file": "psp/script/lua/menu/menu_load.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "ロードが[完了/かんりょう]しました。",
+   "ko": "불러오기가 완료되었습니다."
+  },
+  {
+   "id": "menu_load.lua@54570",
+   "file": "psp/script/lua/menu/menu_load.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "menu_load.lua@54605",
+   "file": "psp/script/lua/menu/menu_load.lua",
+   "form": "quote",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "menu_mainmenu.lua@75366",
+   "file": "psp/script/lua/menu/menu_mainmenu.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "タイトルに[戻/もど]りますか？",
+   "ko": "타이틀로 돌아가시겠습니까?"
+  },
+  {
+   "id": "menu_mainmenu.lua@75525",
+   "file": "psp/script/lua/menu/menu_mainmenu.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "menu_mainmenu.lua@75559",
+   "file": "psp/script/lua/menu/menu_mainmenu.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "menu_mainmenu.lua@78334",
+   "file": "psp/script/lua/menu/menu_mainmenu.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "セーブしますか？",
+   "ko": "저장하시겠습니까?"
+  },
+  {
+   "id": "menu_mainmenu.lua@78428",
+   "file": "psp/script/lua/menu/menu_mainmenu.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "menu_mainmenu.lua@78462",
+   "file": "psp/script/lua/menu/menu_mainmenu.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "menu_mainmenu.lua@78957",
+   "file": "psp/script/lua/menu/menu_mainmenu.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "セーブせずにタイトルに[戻/もど]りますか？",
+   "ko": "저장하지 않고 타이틀로 돌아가시겠습니까?"
+  },
+  {
+   "id": "menu_mainmenu.lua@79176",
+   "file": "psp/script/lua/menu/menu_mainmenu.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "menu_mainmenu.lua@79210",
+   "file": "psp/script/lua/menu/menu_mainmenu.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "menu_option.lua@118009",
+   "file": "psp/script/lua/menu/menu_option.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "[設定/せってい]を[反映/はんえい]せずにメインメニューに[戻/もど]ります。\\\\nよろしいですか？",
+   "ko": "설정을 적용하지 않고 메인 메뉴로 돌아갑니다.\\\\n괜찮으십니까?"
+  },
+  {
+   "id": "menu_option.lua@118473",
+   "file": "psp/script/lua/menu/menu_option.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "menu_option.lua@118507",
+   "file": "psp/script/lua/menu/menu_option.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "menu_option.lua@121460",
+   "file": "psp/script/lua/menu/menu_option.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "オートセーブ[機能/きのう]をＯＦＦにしました。\\\\n[以降/いこう]、データをセーブするときは、\\\\nメインメニューの「タイトルへ[戻/もど]る」を[選択/せんたく]して[下/くだ]さい。",
+   "ko": "오토 세이브 기능을 껐습니다.\\\\n이후 데이터를 저장할 때는\\\\n메인 메뉴의 『타이틀로 돌아가기』를 선택하세요."
+  },
+  {
+   "id": "menu_outline.lua@2708",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[刑事編/けいじへん]",
+   "ko": "형사 편"
+  },
+  {
+   "id": "menu_outline.lua@3138",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "キャスター[編/へん]",
+   "ko": "캐스터 편"
+  },
+  {
+   "id": "menu_outline.lua@3568",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "ルサンチ[編/へん]",
+   "ko": "루상치 편"
+  },
+  {
+   "id": "menu_outline.lua@3988",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[詐欺師編/さぎしへん]",
+   "ko": "사기꾼 편"
+  },
+  {
+   "id": "menu_outline.lua@4428",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[高校生編/こうこうせいへん]",
+   "ko": "고교생 편"
+  },
+  {
+   "id": "menu_outline.lua@4861",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "タイムトラベラー[編/へん]",
+   "ko": "타임 트래블러 편"
+  },
+  {
+   "id": "menu_outline.lua@5617",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１９[時/じ]",
+   "ko": "１９시"
+  },
+  {
+   "id": "menu_outline.lua@6059",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１４[時/じ]",
+   "ko": "１４시"
+  },
+  {
+   "id": "menu_outline.lua@6560",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１４[時/じ]",
+   "ko": "１４시"
+  },
+  {
+   "id": "menu_outline.lua@7031",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１４[時/じ]",
+   "ko": "１４시"
+  },
+  {
+   "id": "menu_outline.lua@7502",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１５[時/じ]",
+   "ko": "１５시"
+  },
+  {
+   "id": "menu_outline.lua@7973",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１５[時/じ]",
+   "ko": "１５시"
+  },
+  {
+   "id": "menu_outline.lua@8444",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１５[時/じ]",
+   "ko": "１５시"
+  },
+  {
+   "id": "menu_outline.lua@8915",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１９[時/じ]",
+   "ko": "１９시"
+  },
+  {
+   "id": "menu_outline.lua@9416",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１９[時/じ]",
+   "ko": "１９시"
+  },
+  {
+   "id": "menu_outline.lua@9858",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１５[時/じ]",
+   "ko": "１５시"
+  },
+  {
+   "id": "menu_outline.lua@10357",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１９[時/じ]",
+   "ko": "１９시"
+  },
+  {
+   "id": "menu_outline.lua@10799",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１６[時/じ]",
+   "ko": "１６시"
+  },
+  {
+   "id": "menu_outline.lua@11298",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１９[時/じ]",
+   "ko": "１９시"
+  },
+  {
+   "id": "menu_outline.lua@11740",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１７[時/じ]",
+   "ko": "１７시"
+  },
+  {
+   "id": "menu_outline.lua@12239",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１９[時/じ]",
+   "ko": "１９시"
+  },
+  {
+   "id": "menu_outline.lua@12681",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１８[時/じ]",
+   "ko": "１８시"
+  },
+  {
+   "id": "menu_outline.lua@13127",
+   "file": "psp/script/lua/menu/menu_outline.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "１９[時/じ]",
+   "ko": "１９시"
+  },
+  {
+   "id": "menu_sample.lua@1165",
+   "file": "psp/script/lua/menu/menu_sample.lua",
+   "form": "quote",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "サンプル画面",
+   "ko": "샘플 화면"
+  },
+  {
+   "id": "menu_save.lua@53343",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "このデータに[上書/うわが]きしますか？",
+   "ko": "이 데이터에 덮어쓸까요?"
+  },
+  {
+   "id": "menu_save.lua@53542",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "menu_save.lua@53576",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "menu_save.lua@53709",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "この[場所/ばしょ]にセーブしますか？",
+   "ko": "이 위치에 저장할까요?"
+  },
+  {
+   "id": "menu_save.lua@53898",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "menu_save.lua@53932",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "menu_save.lua@54202",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "このデータに[上書/うわが]きしますか？",
+   "ko": "이 데이터에 덮어쓸까요?"
+  },
+  {
+   "id": "menu_save.lua@54401",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "menu_save.lua@54435",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "menu_save.lua@54542",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "この[場所/ばしょ]にセーブしますか？",
+   "ko": "이 위치에 저장할까요?"
+  },
+  {
+   "id": "menu_save.lua@54731",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "menu_save.lua@54765",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "menu_save.lua@57661",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "データをセーブしています。",
+   "ko": "데이터를 저장하는 중입니다."
+  },
+  {
+   "id": "menu_save.lua@58130",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[電源/でんげん]をＯＦＦにしないでください。",
+   "ko": "전원을 끄지 마세요."
+  },
+  {
+   "id": "menu_save.lua@71316",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "セーブが[完了/かんりょう]しました。",
+   "ko": "저장이 완료되었습니다."
+  },
+  {
+   "id": "menu_save.lua@71816",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "プレイ[中/ちゅう]に「[初心者/しょしんしゃ]ガイド」を[表示/ひょうじ]しますか？",
+   "ko": "플레이 중에 『초보자 가이드』를 표시할까요?"
+  },
+  {
+   "id": "menu_save.lua@72215",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "menu_save.lua@72249",
+   "file": "psp/script/lua/menu/menu_save.lua",
+   "form": "char",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "menu_staffroll.lua@7762",
+   "file": "psp/script/lua/menu/menu_staffroll.lua",
+   "form": "quote",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "STAFF ROLL終了",
+   "ko": ""
+  },
+  {
+   "id": "menu_staffroll.lua@11578",
+   "file": "psp/script/lua/menu/menu_staffroll.lua",
+   "form": "quote",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "THE ENDムービー",
+   "ko": ""
+  },
+  {
+   "id": "menu_staffroll.lua@11768",
+   "file": "psp/script/lua/menu/menu_staffroll.lua",
+   "form": "quote",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "ムービー再生待ち",
+   "ko": ""
+  },
+  {
+   "id": "menu_tipslist2.lua@10644",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "全て",
+   "ko": ""
+  },
+  {
+   "id": "menu_tipslist2.lua@10735",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[全/すべ]て",
+   "ko": "전체"
+  },
+  {
+   "id": "menu_tipslist2.lua@11679",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "新規",
+   "ko": ""
+  },
+  {
+   "id": "menu_tipslist2.lua@11770",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[新規/しんき]",
+   "ko": "신규"
+  },
+  {
+   "id": "menu_tipslist2.lua@12730",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "キャラ",
+   "ko": ""
+  },
+  {
+   "id": "menu_tipslist2.lua@13110",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "キャラ",
+   "ko": "캐릭터"
+  },
+  {
+   "id": "menu_tipslist2.lua@14038",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "社会",
+   "ko": ""
+  },
+  {
+   "id": "menu_tipslist2.lua@14407",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[社会/しゃかい]",
+   "ko": "사회"
+  },
+  {
+   "id": "menu_tipslist2.lua@15381",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "科学",
+   "ko": ""
+  },
+  {
+   "id": "menu_tipslist2.lua@15751",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[科学/かがく]",
+   "ko": "과학"
+  },
+  {
+   "id": "menu_tipslist2.lua@16714",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "流行",
+   "ko": ""
+  },
+  {
+   "id": "menu_tipslist2.lua@17083",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[流行/りゅうこう]",
+   "ko": "유행"
+  },
+  {
+   "id": "menu_tipslist2.lua@18067",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "豆知識",
+   "ko": ""
+  },
+  {
+   "id": "menu_tipslist2.lua@18447",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[豆知識/まめちしき]",
+   "ko": "잡학"
+  },
+  {
+   "id": "menu_tipslist2.lua@19448",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "裏話",
+   "ko": ""
+  },
+  {
+   "id": "menu_tipslist2.lua@19818",
+   "file": "psp/script/lua/menu/menu_tipslist2.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "[裏話/うらばなし]",
+   "ko": "비화"
+  },
+  {
+   "id": "menu_tipslist4.lua@12273",
+   "file": "psp/script/lua/menu/menu_tipslist4.lua",
+   "form": "char",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "TIPの項目数",
+   "ko": ""
+  },
+  {
+   "id": "menu_title.lua@1473",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "ＴＩＰＳを全部集めている",
+   "ko": ""
+  },
+  {
+   "id": "menu_title.lua@1520",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "ＴＩＰＳをまだ全部集めていない",
+   "ko": ""
+  },
+  {
+   "id": "menu_title.lua@1692",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "ＴＩＭＥＳＴＯＰを全部見た",
+   "ko": ""
+  },
+  {
+   "id": "menu_title.lua@1741",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "ＴＩＭＥＳＴＯＰを全部見ていない",
+   "ko": ""
+  },
+  {
+   "id": "menu_title.lua@1900",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "ＴＴフォンをクリアした",
+   "ko": ""
+  },
+  {
+   "id": "menu_title.lua@1945",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "ＴＴフォンをクリアしていない",
+   "ko": ""
+  },
+  {
+   "id": "menu_title.lua@12926",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "おめでとうございます！\\nあなたは「タイムトラベラーズ」の\\n[全/すべ]ての[要素/ようそ]を[制覇/せいは]しました。",
+   "ko": "축하합니다!\\n당신은 『타임 트래블러즈』의\\n모든 요소를 제패했습니다."
+  },
+  {
+   "id": "menu_title.lua@13222",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Dialog_Start",
+   "drawn": true,
+   "ja": "ＴＴフォンに「[着/き]せ[替/か]え[機能/きのう]」が[追加/ついか]されました！\\n[着/き]せ[替/か]え[機能/きのう]は、\\nヒストリーモードで[使用/しよう]できます。",
+   "ko": "ＴＴ폰에 『옷 갈아입히기 기능』이 추가되었습니다!\\n옷 갈아입히기 기능은\\n히스토리 모드에서 사용할 수 있습니다."
+  },
+  {
+   "id": "menu_title.lua@19891",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Utility_StartMsgDialog",
+   "drawn": true,
+   "ja": "本ゲームはデータインストールに対応しています。\\nゲームデータを記録メディアにインストールしておくことで、ロード時間を短縮することができます。\\nより快適なプレイをお求めの方は、\\nデータインストールの使用をお勧め致します。",
+   "ko": ""
+  },
+  {
+   "id": "menu_title.lua@24193",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Utility_StartMsgDialog",
+   "drawn": true,
+   "ja": "インストールデータが既に存在します。\\nインストールしなおしますか？",
+   "ko": ""
+  },
+  {
+   "id": "menu_title.lua@24263",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Utility_StartMsgDialog",
+   "drawn": true,
+   "ja": "決定",
+   "ko": ""
+  },
+  {
+   "id": "menu_title.lua@24271",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Utility_StartMsgDialog",
+   "drawn": true,
+   "ja": "戻る",
+   "ko": ""
+  },
+  {
+   "id": "menu_title.lua@25574",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Utility_StartMsgDialog",
+   "drawn": true,
+   "ja": "インストールが中止されました。",
+   "ko": ""
+  },
+  {
+   "id": "menu_title.lua@25608",
+   "file": "psp/script/lua/menu/menu_title.lua",
+   "form": "quote",
+   "caller": "Utility_StartMsgDialog",
+   "drawn": true,
+   "ja": "決定",
+   "ko": ""
+  },
+  {
+   "id": "menu_tutorial.lua@11759",
+   "file": "psp/script/lua/menu/menu_tutorial.lua",
+   "form": "char",
+   "caller": "Msg_SetString",
+   "drawn": true,
+   "ja": "[初心者/しょしんしゃ]ガイドの[表示/ひょうじ]をやめますか？",
+   "ko": "초보자 가이드 표시를 그만둘까요?"
+  },
+  {
+   "id": "menu_tutorial.lua@12349",
+   "file": "psp/script/lua/menu/menu_tutorial.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "menu_tutorial.lua@12723",
+   "file": "psp/script/lua/menu/menu_tutorial.lua",
+   "form": "char",
+   "caller": "Text_CreateSet",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "end_save.lua@2978",
+   "file": "psp/script/lua/tts/end_save.lua",
+   "form": "quote",
+   "caller": "?",
+   "drawn": false,
+   "ja": "１５：００へつづく",
+   "ko": ""
+  },
+  {
+   "id": "end_save.lua@3044",
+   "file": "psp/script/lua/tts/end_save.lua",
+   "form": "quote",
+   "caller": "?",
+   "drawn": false,
+   "ja": "１６：００へつづく",
+   "ko": ""
+  },
+  {
+   "id": "end_save.lua@3110",
+   "file": "psp/script/lua/tts/end_save.lua",
+   "form": "quote",
+   "caller": "?",
+   "drawn": false,
+   "ja": "１７：００へつづく",
+   "ko": ""
+  },
+  {
+   "id": "end_save.lua@3176",
+   "file": "psp/script/lua/tts/end_save.lua",
+   "form": "quote",
+   "caller": "?",
+   "drawn": false,
+   "ja": "１８：００へつづく",
+   "ko": ""
+  },
+  {
+   "id": "end_save.lua@3242",
+   "file": "psp/script/lua/tts/end_save.lua",
+   "form": "quote",
+   "caller": "?",
+   "drawn": false,
+   "ja": "１９：００へつづく",
+   "ko": ""
+  },
+  {
+   "id": "end_save.lua@3308",
+   "file": "psp/script/lua/tts/end_save.lua",
+   "form": "quote",
+   "caller": "?",
+   "drawn": false,
+   "ja": "タイムトラベラー[編/へん]へつづく",
+   "ko": ""
+  },
+  {
+   "id": "end_save.lua@3585",
+   "file": "psp/script/lua/tts/end_save.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "セーブしますか？",
+   "ko": "저장하시겠습니까?"
+  },
+  {
+   "id": "end_save.lua@3615",
+   "file": "psp/script/lua/tts/end_save.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "はい",
+   "ko": "예"
+  },
+  {
+   "id": "end_save.lua@3623",
+   "file": "psp/script/lua/tts/end_save.lua",
+   "form": "quote",
+   "caller": "Dialog",
+   "drawn": true,
+   "ja": "いいえ",
+   "ko": "아니오"
+  },
+  {
+   "id": "telop.lua@5367",
+   "file": "psp/script/lua/tts/telop.lua",
+   "form": "quote",
+   "caller": "Print",
+   "drawn": false,
+   "ja": "あんたバカ閉じる",
+   "ko": ""
+  }
+ ]
+}

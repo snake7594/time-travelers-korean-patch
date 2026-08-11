@@ -1,0 +1,164 @@
+{
+ "schema": "tt1-fix/1",
+ "game": "Time Travelers (NPJH50597)",
+ "totals": {
+  "chapters": 35,
+  "entries": 8693
+ },
+ "rules": {
+  "task": "Fix Korean spacing (띄어쓰기) in ko. Do not retranslate: keep the wording, only repair spacing and line breaks.",
+  "wrapping": "The engine wraps automatically at spaces. Line breaks are NOT needed to fit the box.",
+  "line_break": "\\n (backslash + n) is a hard break. Keep only the ones the ja source has, in the same places. Do not add new ones.",
+  "spacing": "Never drop a space to make a line shorter. Natural Korean spacing takes priority over line length.",
+  "line_length": "About 30 full-width characters fit on a line; treat it as advisory, not a limit.",
+  "keep": "Leave tags (<B>, <W15>, <TIP...>, </TIP>), the [base/key] brackets inside TIP tags, a leading ＊, and 「」『』 speech brackets exactly as they are.",
+  "flags": {
+   "added_break": "ko had a line break the source does not have; it was replaced with a space automatically -- check the result reads naturally.",
+   "extra_break": "ko has more breaks than the source; decide which to drop.",
+   "glued_break": "a break sits between two words with no space either side -- likely a swallowed space.",
+   "long_run": "12+ Hangul syllables with no space; almost certainly a missing space."
+  }
+ },
+ "files": [
+  {
+   "chapter": "A01",
+   "entries": 125
+  },
+  {
+   "chapter": "C01",
+   "entries": 365
+  },
+  {
+   "chapter": "C02",
+   "entries": 228
+  },
+  {
+   "chapter": "C03",
+   "entries": 297
+  },
+  {
+   "chapter": "C04",
+   "entries": 307
+  },
+  {
+   "chapter": "C05",
+   "entries": 275
+  },
+  {
+   "chapter": "C06",
+   "entries": 144
+  },
+  {
+   "chapter": "H02",
+   "entries": 434
+  },
+  {
+   "chapter": "H03",
+   "entries": 383
+  },
+  {
+   "chapter": "H04",
+   "entries": 238
+  },
+  {
+   "chapter": "H05",
+   "entries": 305
+  },
+  {
+   "chapter": "H06",
+   "entries": 107
+  },
+  {
+   "chapter": "I01",
+   "entries": 5
+  },
+  {
+   "chapter": "I02",
+   "entries": 1
+  },
+  {
+   "chapter": "I03",
+   "entries": 2
+  },
+  {
+   "chapter": "I04",
+   "entries": 17
+  },
+  {
+   "chapter": "I05",
+   "entries": 73
+  },
+  {
+   "chapter": "I06",
+   "entries": 38
+  },
+  {
+   "chapter": "M07",
+   "entries": 324
+  },
+  {
+   "chapter": "P01",
+   "entries": 376
+  },
+  {
+   "chapter": "P02",
+   "entries": 328
+  },
+  {
+   "chapter": "P03",
+   "entries": 264
+  },
+  {
+   "chapter": "P04",
+   "entries": 223
+  },
+  {
+   "chapter": "P05",
+   "entries": 144
+  },
+  {
+   "chapter": "P06",
+   "entries": 123
+  },
+  {
+   "chapter": "R02",
+   "entries": 299
+  },
+  {
+   "chapter": "R03",
+   "entries": 608
+  },
+  {
+   "chapter": "R04",
+   "entries": 484
+  },
+  {
+   "chapter": "R05",
+   "entries": 570
+  },
+  {
+   "chapter": "R06",
+   "entries": 243
+  },
+  {
+   "chapter": "S02",
+   "entries": 171
+  },
+  {
+   "chapter": "S03",
+   "entries": 266
+  },
+  {
+   "chapter": "S04",
+   "entries": 454
+  },
+  {
+   "chapter": "S05",
+   "entries": 363
+  },
+  {
+   "chapter": "S06",
+   "entries": 109
+  }
+ ]
+}

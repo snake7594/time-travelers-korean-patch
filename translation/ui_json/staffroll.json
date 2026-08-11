@@ -1,0 +1,1772 @@
+{
+ "schema": "tt1-ui/1",
+ "source": "psp/txt/staffroll",
+ "count": 353,
+ "entries": [
+  {
+   "id": "staffroll_ja.cfg.bin#4",
+   "ja": "企画・原案・監督",
+   "ko": "기획・원안・감독"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#5",
+   "ja": "イシイジロウ",
+   "ko": "이시이 지로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#6",
+   "ja": "プロデューサー",
+   "ko": "프로듀서"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#7",
+   "ja": "日野 晃博",
+   "ko": "히노 아키히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#8",
+   "ja": "脚本",
+   "ko": "각본"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#9",
+   "ja": "北島 行徳",
+   "ko": "기타지마 유키노리"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#10",
+   "ja": "音楽",
+   "ko": "음악"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#11",
+   "ja": "坂本 英城",
+   "ko": "사카모토 히데키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#12",
+   "ja": "演出",
+   "ko": "연출"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#13",
+   "ja": "飯野 歩",
+   "ko": "이이노 아유미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#14",
+   "ja": "リードプログラマー",
+   "ko": "리드 프로그래머"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#15",
+   "ja": "金田 元貴",
+   "ko": "카네다 모토키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#16",
+   "ja": "グラフィックディレクション",
+   "ko": "그래픽 디렉션"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#17",
+   "ja": "俵 弘一",
+   "ko": "타와라 코이치"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#18",
+   "ja": "スクリプトディレクション",
+   "ko": "스크립트 디렉션"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#19",
+   "ja": "荒井 宏光",
+   "ko": "아라이 히로미츠"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#20",
+   "ja": "キャラクターデザイン＆イラストレーション",
+   "ko": "캐릭터 디자인・일러스트레이션"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#21",
+   "ja": "池田 奈緒",
+   "ko": "이케다 나오"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#22",
+   "ja": "キャラクターデザイン",
+   "ko": "캐릭터 디자인"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#23",
+   "ja": "倉狩 健一",
+   "ko": "쿠라카리 켄이치"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#24",
+   "ja": "背景デザイン",
+   "ko": "배경 디자인"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#25",
+   "ja": "梁井 信之　高橋 一彦",
+   "ko": "야나이 노부유키　타카하시 카즈히코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#26",
+   "ja": "音響監督",
+   "ko": "음향 감독"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#27",
+   "ja": "三好 慶一郎",
+   "ko": "미요시 케이이치로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#28",
+   "ja": "―声の出演―",
+   "ko": "―성우―"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#29",
+   "ja": "新道 みこと",
+   "ko": "신도 미코토"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#30",
+   "ja": "沢城 みゆき",
+   "ko": "사와시로 미유키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#31",
+   "ja": "甲斐 駿介（スケルトン）",
+   "ko": "카이 슌스케(스켈레톤)"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#32",
+   "ja": "東地 宏樹",
+   "ko": "토치 히로키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#33",
+   "ja": "深瀬 有理",
+   "ko": "후카세 유리"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#34",
+   "ja": "細谷 佳正",
+   "ko": "호소야 요시마사"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#35",
+   "ja": "ルサンチ☆マン（犬山かける）",
+   "ko": "루상치☆맨(이누야마 카케루)"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#36",
+   "ja": "丸山 壮史",
+   "ko": "마루야마 소지"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#37",
+   "ja": "神谷 壮馬",
+   "ko": "카미야 소마"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#38",
+   "ja": "宮内 敦士",
+   "ko": "미야우치 아츠시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#39",
+   "ja": "伏見 雛",
+   "ko": "후시미 히나"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#40",
+   "ja": "新谷 良子",
+   "ko": "신타니 료코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#41",
+   "ja": "新道 究悟",
+   "ko": "신도 큐고"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#42",
+   "ja": "平田 広明",
+   "ko": "히라타 히로아키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#43",
+   "ja": "アービター・ぺトロニウス",
+   "ko": "아비터・페트로니우스"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#44",
+   "ja": "東條 加那子",
+   "ko": "토조 카나코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#45",
+   "ja": "小暮 修一郎",
+   "ko": "코구레 슈이치로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#46",
+   "ja": "中川 慶一",
+   "ko": "나카가와 케이이치"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#47",
+   "ja": "中山 雅人",
+   "ko": "나카야마 마사토"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#48",
+   "ja": "興津 和幸",
+   "ko": "오키츠 카즈유키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#49",
+   "ja": "糸山 純子",
+   "ko": "이토야마 준코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#50",
+   "ja": "田中 理恵",
+   "ko": "타나카 리에"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#51",
+   "ja": "篠原 桃香",
+   "ko": "시노하라 모모카"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#52",
+   "ja": "山田 みほ",
+   "ko": "야마다 미호"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#53",
+   "ja": "円城 義樹",
+   "ko": "엔조 요시키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#54",
+   "ja": "浦山 迅",
+   "ko": "우라야마 진"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#55",
+   "ja": "目崎 要",
+   "ko": "메자키 카나메"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#56",
+   "ja": "水内 清光",
+   "ko": "미즈우치 키요미츠"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#57",
+   "ja": "山吹 千里子（ルサンチレディー）",
+   "ko": "야마부키 치리코(루상치 레이디)"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#58",
+   "ja": "宍戸 留美",
+   "ko": "시시도 루미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#59",
+   "ja": "本間 春人（ビッグハンド）",
+   "ko": "혼마 하루토(빅 핸드)"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#60",
+   "ja": "乃村 健次",
+   "ko": "노무라 켄지"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#61",
+   "ja": "鯉村 卓（マジコンプレックス）",
+   "ko": "코이무라 타쿠(마지 콤플렉스)"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#62",
+   "ja": "下和田 ヒロキ",
+   "ko": "시모와다 히로키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#63",
+   "ja": "速水 護（青年マッハ）",
+   "ko": "하야미 마모루(청년 마하)"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#64",
+   "ja": "木内 秀信",
+   "ko": "키우치 히데노부"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#65",
+   "ja": "ナパ・ポーパオイン",
+   "ko": "나파・포파오인"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#66",
+   "ja": "川原 慶久",
+   "ko": "카와하라 요시히사"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#67",
+   "ja": "田中 善雄",
+   "ko": "타나카 요시오"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#68",
+   "ja": "斎藤 志郎",
+   "ko": "사이토 시로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#69",
+   "ja": "御手洗 登喜雄",
+   "ko": "미타라이 토키오"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#70",
+   "ja": "檀 臣幸",
+   "ko": "마유즈미 토모유키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#71",
+   "ja": "鈴川 数美",
+   "ko": "스즈카와 카즈미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#72",
+   "ja": "土田 大",
+   "ko": "츠치다 히로시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#73",
+   "ja": "沢木 深",
+   "ko": "사와키 신"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#74",
+   "ja": "成田 剣",
+   "ko": "나리타 켄"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#75",
+   "ja": "野中 譲二",
+   "ko": "노나카 조지"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#76",
+   "ja": "谷 昌樹",
+   "ko": "타니 마사키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#77",
+   "ja": "神谷 陽太",
+   "ko": "카미야 요타"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#78",
+   "ja": "石田 嘉代",
+   "ko": "이시다 카요"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#79",
+   "ja": "神谷 晴美",
+   "ko": "카미야 하루미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#80",
+   "ja": "まつだ 志緒理",
+   "ko": "마츠다 시오리"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#81",
+   "ja": "緒方首相",
+   "ko": "오가타 총리"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#82",
+   "ja": "原 康義",
+   "ko": "하라 야스요시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#83",
+   "ja": "光岡 邦雄",
+   "ko": "미츠오카 쿠니오"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#84",
+   "ja": "遠藤 大智",
+   "ko": "엔도 다이치"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#85",
+   "ja": "蔵元 源",
+   "ko": "쿠라모토 겐"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#86",
+   "ja": "咲野 俊介",
+   "ko": "사쿠노 슌스케"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#87",
+   "ja": "只野 英雄",
+   "ko": "타다노 히데오"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#88",
+   "ja": "佐藤 せつじ",
+   "ko": "사토 세츠지"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#89",
+   "ja": "北条 百合華",
+   "ko": "호조 유리카"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#90",
+   "ja": "新井 里美",
+   "ko": "아라이 사토미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#91",
+   "ja": "高井戸 盛人",
+   "ko": "타카이도 모리토"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#92",
+   "ja": "落合 弘治",
+   "ko": "오치아이 코지"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#93",
+   "ja": "伏見 明",
+   "ko": "후시미 아키라"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#94",
+   "ja": "玉野井 直樹",
+   "ko": "타마노이 나오키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#95",
+   "ja": "みことの女友達（ユーリャ）",
+   "ko": "미코토의 여자 친구(유랴)"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#96",
+   "ja": "ジェーニャ",
+   "ko": "제냐"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#97",
+   "ja": "みこと（子供時代）",
+   "ko": "미코토(어린 시절)"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#98",
+   "ja": "佐々木 りお",
+   "ko": "사사키 리오"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#99",
+   "ja": "かける（12歳）",
+   "ko": "카케루(12세)"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#100",
+   "ja": "優希",
+   "ko": "유키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#101",
+   "ja": "みこと（小学生）",
+   "ko": "미코토(초등학생 시절)"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#102",
+   "ja": "半場 友恵",
+   "ko": "한바 토모에"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#103",
+   "ja": "有理（小学生）",
+   "ko": "유리(초등학생 시절)"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#104",
+   "ja": "瀧本 富士子",
+   "ko": "타키모토 후지코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#105",
+   "ja": "ドクロの運転手",
+   "ko": "해골 운전기사"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#106",
+   "ja": "いずみ 尚",
+   "ko": "이즈미 히사시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#107",
+   "ja": "有理を庇った男性の妻",
+   "ko": "유리를 감싼 남자의 아내"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#108",
+   "ja": "岡田 恵",
+   "ko": "오카다 메구미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#109",
+   "ja": "ＳＩＦ隊長",
+   "ko": "SIF 대장"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#110",
+   "ja": "広田 みのる",
+   "ko": "히로타 미노루"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#111",
+   "ja": "宗川 めぐみ　志田 有彩　一杉 佳澄",
+   "ko": "무네카와 메구미　시다 아리사　히토스기 카스미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#112",
+   "ja": "杉村 憲司　　樋口 智透　かぬか 光明",
+   "ko": "스기무라 켄지　히구치 토모유키　카누카 미츠아키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#113",
+   "ja": "粟野 志門　松本 忍　新田 英人",
+   "ko": "아와노 시몬　마츠모토 시노부　닛타 히데토"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#114",
+   "ja": "青木 強　慶長 佑香　宮本 崇弘　近藤 浩徳",
+   "ko": "아오키 츠요시　케이초 유카　미야모토 타카히로　콘도 히로노리"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#115",
+   "ja": "シナリオプランナー",
+   "ko": "시나리오 플래너"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#116",
+   "ja": "足立 将大",
+   "ko": "아다치 쇼타"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#117",
+   "ja": "シナリオ協力",
+   "ko": "시나리오 협력"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#118",
+   "ja": "北原 杏子",
+   "ko": "키타하라 쿄코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#119",
+   "ja": "プランナー",
+   "ko": "플래너"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#120",
+   "ja": "内田 あすか　松浦 正尭",
+   "ko": "우치다 아스카　마츠우라 마사타카"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#121",
+   "ja": "設定考証",
+   "ko": "설정 고증"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#122",
+   "ja": "白土 晴一",
+   "ko": "시라토 세이이치"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#123",
+   "ja": "サウンドディレクション",
+   "ko": "사운드 디렉션"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#124",
+   "ja": "齊藤 賢一",
+   "ko": "사이토 켄이치"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#125",
+   "ja": "サウンドエディター",
+   "ko": "사운드 에디터"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#126",
+   "ja": "中村 栄治　嶺川 千春",
+   "ko": "나카무라 에이지　미네카와 치하루"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#127",
+   "ja": "プログラム",
+   "ko": "프로그램"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#128",
+   "ja": "阿部 敏昭　木村 隆史",
+   "ko": "아베 토시아키　키무라 타카시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#129",
+   "ja": "大石 悦生　高橋 邦裕",
+   "ko": "오이시 에츠오　타카하시 쿠니히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#130",
+   "ja": "プログラムサポート",
+   "ko": "프로그램 서포트"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#131",
+   "ja": "熊谷 宇祐　板垣 衛",
+   "ko": "쿠마가이 유스케　이타가키 마모루"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#132",
+   "ja": "樋口 厚志　安達 圭司",
+   "ko": "히구치 아츠시　아다치 케이지"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#133",
+   "ja": "山楯 知己　益田 和典",
+   "ko": "야마타테 토모키　마시다 카즈노리"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#134",
+   "ja": "牧 直司　荒川 正行",
+   "ko": "마키 나오지　아라카와 마사유키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#135",
+   "ja": "田中 智規　山内 英行",
+   "ko": "타나카 토모노리　야마우치 히데유키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#136",
+   "ja": "背景モデリングディレクション",
+   "ko": "배경 모델링 디렉션"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#137",
+   "ja": "軽部 優",
+   "ko": "카루베 유"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#138",
+   "ja": "背景モデリング",
+   "ko": "배경 모델링"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#139",
+   "ja": "マツダタケシ",
+   "ko": "마츠다 타케시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#140",
+   "ja": "上村　寛子　河村　真亜耶　福富　綾子　",
+   "ko": "카미무라 히로코　카와무라 마아야　후쿠토미 아야코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#141",
+   "ja": "羽鳥　信浩　小林　朱里　阿部　智広",
+   "ko": "하토리 노부히로　코바야시 아카리　아베 토모히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#142",
+   "ja": "宮田 瑛児　吉田 奈未　木村 孝史",
+   "ko": "미야타 에이지　요시다 나미　키무라 타카시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#143",
+   "ja": "宮 弘美　綿貫 剛一　前田 恭伸　植木 裕介",
+   "ko": "미야 히로미　와타누키 고이치　마에다 야스노부　우에키 유스케"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#144",
+   "ja": "杉山 るな　藤木 亮　岡本 守弘",
+   "ko": "스기야마 루나　후지키 료　오카모토 모리히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#145",
+   "ja": "エフェクトディレクション",
+   "ko": "이펙트 디렉션"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#146",
+   "ja": "幸谷 賢明",
+   "ko": "코야 켄메이"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#147",
+   "ja": "エフェクト",
+   "ko": "이펙트"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#148",
+   "ja": "小林 諒　森 直子　中所 光仁",
+   "ko": "코바야시 료　모리 나오코　나카쇼 미츠히토"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#149",
+   "ja": "横山 稔典　桝田 将史　関内 朋哉",
+   "ko": "요코야마 토시노리　마스다 마사후미　세키우치 토모야"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#150",
+   "ja": "モーションディレクション",
+   "ko": "모션 디렉션"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#151",
+   "ja": "伊藤 正樹",
+   "ko": "이토 마사키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#152",
+   "ja": "イベントモーションディレクション",
+   "ko": "이벤트 모션 디렉션"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#153",
+   "ja": "嶋田 淑人",
+   "ko": "시마다 요시토"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#154",
+   "ja": "イベントモーション",
+   "ko": "이벤트 모션"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#155",
+   "ja": "鴻上 崇史",
+   "ko": "코가미 타카시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#156",
+   "ja": "遠藤 数幸　上田 智恵　図師 直嗣",
+   "ko": "엔도 카즈유키　우에다 치에　즈시 나오츠구"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#157",
+   "ja": "伊東 悠美　大澤 眞史　津川 桃子",
+   "ko": "이토 유미　오사와 마사후미　츠가와 모모코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#158",
+   "ja": "三ヶ田 純久　大坪 隆仁　藤川 望美",
+   "ko": "미카다 스미히사　오츠보 타카히토　후지카와 노조미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#159",
+   "ja": "石川 智丈　松尾 憲宏",
+   "ko": "이시카와 토모타케　마츠오 노리히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#160",
+   "ja": "杉山　篤司",
+   "ko": "스기야마 아츠시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#161",
+   "ja": "阿部　貴裕　南雲　鷹久",
+   "ko": "아베 타카히로　나구모 타카히사"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#162",
+   "ja": "中泉 智絵　大木 玲奈　佐藤 康明　福田 大輔",
+   "ko": "나카이즈미 치에　오오키 레나　사토 야스아키　후쿠다 다이스케"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#163",
+   "ja": "加藤 英理子　田中 一平　伊達 有希",
+   "ko": "카토 에리코　타나카 잇페이　다테 유키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#164",
+   "ja": "モーションデザイン制作進行",
+   "ko": "모션 디자인 제작 진행"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#165",
+   "ja": "鈴木 正輝　戸川 奨",
+   "ko": "스즈키 마사키　토가와 쇼"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#166",
+   "ja": "スクリプト",
+   "ko": "스크립트"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#167",
+   "ja": "江藤 裕介　新夕 優子　星澤 亜実",
+   "ko": "에토 유스케　니이유 유코　호시자와 아미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#168",
+   "ja": "永森 慎一　村岡 美香　岡 真沙美",
+   "ko": "나가모리 신이치　무라오카 미카　오카 마사미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#169",
+   "ja": "村上 恭兵　宇野 高史",
+   "ko": "무라카미 쿄헤이　우노 타카시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#170",
+   "ja": "野田 眞弘",
+   "ko": "노다 마사히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#171",
+   "ja": "モーションキャプチャー",
+   "ko": "모션 캡처"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#172",
+   "ja": "見戸 裕樹",
+   "ko": "미토 히로키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#173",
+   "ja": "榊原 優　田中 康陽　岩神 崇博",
+   "ko": "사카키바라 유　타나카 야스아키　이와가미 타카히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#174",
+   "ja": "モーションアクター",
+   "ko": "모션 액터"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#175",
+   "ja": "東 沙耶香　薦田 裕子　雪竹 舞子",
+   "ko": "히가시 사야카　코모다 유코　유키타케 마이코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#176",
+   "ja": "石丸 明裕　大城 真和　福澤 究",
+   "ko": "이시마루 아키히로　오시로 마사카즈　후쿠자와 키와무"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#177",
+   "ja": "寺崎 索　中村 卓二　古賀 亘",
+   "ko": "테라사키 사쿠　나카무라 타쿠지　코가 와타루"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#178",
+   "ja": "屋敷 紘子　神戸 豊",
+   "ko": "야시키 히로코　칸베 유타카"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#179",
+   "ja": "アクションコーディネイター",
+   "ko": "액션 코디네이터"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#180",
+   "ja": "杉原　明",
+   "ko": "스기하라 아키라"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#181",
+   "ja": "アクションモーションアクター",
+   "ko": "액션 모션 액터"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#182",
+   "ja": "神戸 豊　屋敷 紘子　古賀 亘",
+   "ko": "칸베 유타카　야시키 히로코　코가 와타루"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#183",
+   "ja": "アクションクオリティーマネージャー",
+   "ko": "액션 퀄리티 매니저"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#184",
+   "ja": "川名 求己",
+   "ko": "카와나 모토미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#185",
+   "ja": "モーションキャプチャー軍事アドバイザー",
+   "ko": "모션 캡처 군사 자문"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#186",
+   "ja": "松本 喜与志",
+   "ko": "마츠모토 키요시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#187",
+   "ja": "キャラクターモデリング",
+   "ko": "캐릭터 모델링"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#188",
+   "ja": "山田　康太　中原　丈暁",
+   "ko": "야마다 코타　나카하라 타케아키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#189",
+   "ja": "田渕　裕美　菅頭　圭佑",
+   "ko": "타부치 히로미　칸토 케이스케"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#190",
+   "ja": "阿部 伸吾　綿貫 寛",
+   "ko": "아베 신고　와타누키 히로시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#191",
+   "ja": "井川 広宣　原 祐太",
+   "ko": "이카와 히로노리　하라 유타"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#192",
+   "ja": "アイテムモデリング",
+   "ko": "아이템 모델링"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#193",
+   "ja": "宍倉 崇　中山 直之　古野 優一",
+   "ko": "시시쿠라 타카시　나카야마 나오유키　후루노 유이치"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#194",
+   "ja": "移植グラフィック",
+   "ko": "이식 그래픽"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#195",
+   "ja": "丹羽 浩　藤松 隆広",
+   "ko": "니와 히로시　후지마츠 타카히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#196",
+   "ja": "重藤 明子　次本 康人",
+   "ko": "시게후지 아키코　츠기모토 야스토"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#197",
+   "ja": "イラストレーション",
+   "ko": "일러스트레이션"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#198",
+   "ja": "荒川 直樹",
+   "ko": "아라카와 나오키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#199",
+   "ja": "アクション絵コンテ",
+   "ko": "액션 콘티"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#200",
+   "ja": "安藤 真裕",
+   "ko": "안도 마사히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#201",
+   "ja": "絵コンテ制作進行",
+   "ko": "콘티 제작 진행"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#202",
+   "ja": "小笠原 宗紀",
+   "ko": "오가사와라 무네노리"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#203",
+   "ja": "岡田 邦彦",
+   "ko": "오카다 쿠니히코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#204",
+   "ja": "絵コンテ",
+   "ko": "콘티"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#205",
+   "ja": "小島 正幸　小美野 雅彦",
+   "ko": "코지마 마사유키　오미노 마사히코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#206",
+   "ja": "迫井 政行　橘 正紀",
+   "ko": "사코이 마사유키　타치바나 마사키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#207",
+   "ja": "諸貫 哲朗　横山 彰利",
+   "ko": "모로누키 테츠로　요코야마 아키토시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#208",
+   "ja": "アバンタイトル・予告編演出",
+   "ko": "오프닝 타이틀・예고편 연출"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#209",
+   "ja": "武藤　健司",
+   "ko": "무토 켄지"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#210",
+   "ja": "藤田　周文",
+   "ko": "후지타 카네후미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#211",
+   "ja": "アバンタイトル・予告編制作",
+   "ko": "오프닝 타이틀・예고편 제작"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#212",
+   "ja": "井上　美弦",
+   "ko": "이노우에 미즈루"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#213",
+   "ja": "作田　ハズム　青木 康浩",
+   "ko": "사쿠다 하지무　아오키 야스히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#214",
+   "ja": "湯浅　史子　久保　公人",
+   "ko": "유아사 후미코　쿠보 키미토"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#215",
+   "ja": "東地　和生　白石　誠",
+   "ko": "토치 카즈오　시라이시 마코토"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#216",
+   "ja": "グラフィックスペシャルサンクス",
+   "ko": "그래픽 스페셜 생크스"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#217",
+   "ja": "武田　哲也　",
+   "ko": "타케다 테츠야"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#218",
+   "ja": "山路 和紀　原田 敏夫　高橋 鮎美",
+   "ko": "야마지 카즈노리　하라다 토시오　타카하시 아유미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#219",
+   "ja": "音声収録コーディネーター",
+   "ko": "음성 녹음 코디네이터"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#220",
+   "ja": "岡野 晃二　北條 雅也　栗崎 智子",
+   "ko": "오카노 코지　호조 마사야　쿠리사키 토모코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#221",
+   "ja": "音声収録スタジオ",
+   "ko": "음성 녹음 스튜디오"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#222",
+   "ja": "東北新社　等々力スタジオ",
+   "ko": "도호쿠 신사　토도로키 스튜디오"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#223",
+   "ja": "オムニバス・ジャパン　三分坂スタジオ",
+   "ko": "옴니버스・재팬　산분자카 스튜디오"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#224",
+   "ja": "オムニバスジャパン　ＴＦＣスタジオセンター",
+   "ko": "옴니버스 재팬　TFC 스튜디오 센터"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#225",
+   "ja": "東北新社　新宿スタジオ",
+   "ko": "도호쿠 신사　신주쿠 스튜디오"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#226",
+   "ja": "挿入歌",
+   "ko": "삽입곡"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#228",
+   "ja": "歌：Sarah Alainn",
+   "ko": "노래: Sarah Alainn"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#229",
+   "ja": "作曲：坂本英城",
+   "ko": "작곡: 사카모토 히데키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#230",
+   "ja": "日本語詞：イシイジロウ",
+   "ko": "일본어 가사: 이시이 지로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#231",
+   "ja": "英語詞：Sarah Alainn",
+   "ko": "영어 가사: Sarah Alainn"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#233",
+   "ja": "歌：やなぎなぎ",
+   "ko": "노래: 야나기 나기"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#234",
+   "ja": "作曲：坂本 英城",
+   "ko": "작곡: 사카모토 히데키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#235",
+   "ja": "英訳：SAK.",
+   "ko": "영어 번역: SAK."
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#237",
+   "ja": "歌：尾島 梨絵",
+   "ko": "노래: 오지마 리에"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#239",
+   "ja": "歌：Satsy",
+   "ko": "노래: Satsy"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#240",
+   "ja": "日本語詞：北島行徳・イシイジロウ",
+   "ko": "일본어 가사: 기타지마 유키노리・이시이 지로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#242",
+   "ja": "“ミライノウタニノセ”",
+   "ko": "『미라이노우타니노세』"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#243",
+   "ja": "歌：宍戸 留美",
+   "ko": "노래: 시시도 루미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#244",
+   "ja": "作曲：坂本 英城　作詞：イシイジロウ",
+   "ko": "작곡: 사카모토 히데키　작사: 이시이 지로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#245",
+   "ja": "“全日本電力CMソング”",
+   "ko": "『전일본전력 CM송』"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#246",
+   "ja": "歌：青木 春子",
+   "ko": "노래: 아오키 하루코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#247",
+   "ja": "作曲：坂本 英城　作詞：足立 将大",
+   "ko": "작곡: 사카모토 히데키　작사: 아다치 쇼타"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#248",
+   "ja": "ヴァイオリン",
+   "ko": "바이올린"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#249",
+   "ja": "今野均",
+   "ko": "콘노 히토시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#250",
+   "ja": "徳永 友美　藤堂 昌彦　漆原 直美",
+   "ko": "토쿠나가 토모미　토도 마사히코　우루시하라 나오미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#251",
+   "ja": "桐山 なぎさ　伊能 修　岡部 磨知",
+   "ko": "키리야마 나기사　이노 오사무　오카베 마치"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#252",
+   "ja": "柳原 有弥　石橋 尚子　田島 朗子",
+   "ko": "야나기하라 유미　이시바시 나오코　타지마 아키코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#253",
+   "ja": "ヴィオラ",
+   "ko": "비올라"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#254",
+   "ja": "渡辺 一雄　渡部 安見子　大沼 幸江　岡 さおり",
+   "ko": "와타나베 카즈오　와타베 야스미코　오누마 유키에　오카 사오리"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#255",
+   "ja": "チェロ",
+   "ko": "첼로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#256",
+   "ja": "堀沢 真己　江口 心一　結城 貴弘",
+   "ko": "호리사와 마키　에구치 신이치　유키 타카히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#257",
+   "ja": "コントラバス",
+   "ko": "콘트라베이스"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#258",
+   "ja": "一本 茂樹",
+   "ko": "이치모토 시게키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#259",
+   "ja": "フルート",
+   "ko": "플루트"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#260",
+   "ja": "高桑 英世　浅尾 真実",
+   "ko": "타카쿠와 히데요　아사오 마미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#261",
+   "ja": "オーボエ",
+   "ko": "오보에"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#262",
+   "ja": "庄司 知史",
+   "ko": "쇼지 토모후미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#263",
+   "ja": "クラリネット",
+   "ko": "클라리넷"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#264",
+   "ja": "山根 公男　白石 幸司　畑中 真理",
+   "ko": "야마네 키미오　시라이시 코지　하타나카 마리"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#265",
+   "ja": "ファゴット",
+   "ko": "바순"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#266",
+   "ja": "前田 正志　井上 俊次",
+   "ko": "마에다 마사시　이노우에 슌지"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#267",
+   "ja": "サックス",
+   "ko": "색소폰"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#269",
+   "ja": "トランペット",
+   "ko": "트럼펫"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#270",
+   "ja": "奥村 晶　石井 憲一",
+   "ko": "오쿠무라 아키라　이시이 켄이치"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#271",
+   "ja": "トロンボーン",
+   "ko": "트롬본"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#272",
+   "ja": "中川 英二郎　野々下 興一　奥村 晃　星野 舞子",
+   "ko": "나카가와 에이지로　노노시타 코이치　오쿠무라 아키라　호시노 마이코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#273",
+   "ja": "ホルン",
+   "ko": "호른"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#274",
+   "ja": "藤田 乙比古　岸上 穣　今井 仁志　野見山 和子",
+   "ko": "후지타 오토히코　키시가미 유타카　이마이 히토시　노미야마 카즈코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#275",
+   "ja": "ハーモニカ",
+   "ko": "하모니카"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#277",
+   "ja": "アコースティック＆エレクトリックギター",
+   "ko": "어쿠스틱・일렉트릭 기타"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#278",
+   "ja": "浅田 靖",
+   "ko": "아사다 야스시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#279",
+   "ja": "ティンパニ",
+   "ko": "팀파니"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#280",
+   "ja": "小竹 満里",
+   "ko": "코타케 마리"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#281",
+   "ja": "ドラム＆スネアドラム",
+   "ko": "드럼・스네어 드럼"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#282",
+   "ja": "川越 康弘",
+   "ko": "카와고에 야스히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#283",
+   "ja": "ピアノ",
+   "ko": "피아노"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#284",
+   "ja": "楽譜制作",
+   "ko": "악보 제작"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#285",
+   "ja": "瀬尾 高康",
+   "ko": "세오 타카야스"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#286",
+   "ja": "エンジニア",
+   "ko": "엔지니어"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#287",
+   "ja": "河野 真人",
+   "ko": "코노 마사토"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#288",
+   "ja": "レコーディングエンジニア",
+   "ko": "레코딩 엔지니어"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#289",
+   "ja": "藤巻 兄将",
+   "ko": "후지마키 아키마사"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#290",
+   "ja": "高村 政貴",
+   "ko": "타카무라 마사키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#291",
+   "ja": "アシスタントエンジニア",
+   "ko": "어시스턴트 엔지니어"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#292",
+   "ja": "込山 拓哉　井出 環　小塩 真徳　勝又 紀彦",
+   "ko": "코미야마 타쿠야　이데 타마키　오시오 마사노리　카츠마타 노리히코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#295",
+   "ja": "ミュージシャンコーディネイト",
+   "ko": "뮤지션 코디네이트"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#296",
+   "ja": "里見 勉　戸澤 亜沙香",
+   "ko": "사토미 츠토무　토자와 아사카"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#297",
+   "ja": "音楽アシスタントプロデューサー",
+   "ko": "음악 어시스턴트 프로듀서"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#298",
+   "ja": "加藤 浩義",
+   "ko": "카토 히로요시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#299",
+   "ja": "音楽アシスタントディレクター",
+   "ko": "음악 어시스턴트 디렉터"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#300",
+   "ja": "BGMスペシャルサンクス",
+   "ko": "BGM 스페셜 생크스"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#301",
+   "ja": "ユニバーサル ミュージック",
+   "ko": "유니버설 뮤직"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#302",
+   "ja": "ムジカキアラ",
+   "ko": "무지카 키아라"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#303",
+   "ja": "株式会社M&C Saatchi",
+   "ko": "주식회사 M&C Saatchi"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#304",
+   "ja": "越野 民雄　羽太 こさち　広田 公",
+   "ko": "코시노 타미오　하타 코사치　히로타 이사오"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#305",
+   "ja": "篠原 良　堀口 恵里　須永 優子",
+   "ko": "시노하라 료　호리구치 에리　스나가 유코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#306",
+   "ja": "草野 洋秋　佐藤 聡　小野 加奈代",
+   "ko": "쿠사노 히로아키　사토 사토시　오노 카나요"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#307",
+   "ja": "制作協力",
+   "ko": "제작 협력"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#308",
+   "ja": "アーク・クリエイション",
+   "ko": "아크・크리에이션"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#309",
+   "ja": "株式会社アーゼスト",
+   "ko": "주식회사 아제스트"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#310",
+   "ja": "株式会社アバン",
+   "ko": "주식회사 아방"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#311",
+   "ja": "株式会社イッタロ",
+   "ko": "주식회사 잇타로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#312",
+   "ja": "株式会社活劇座",
+   "ko": "주식회사 활극좌"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#313",
+   "ja": "株式会社キネマシトラス",
+   "ko": "주식회사 키네마 시트러스"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#314",
+   "ja": "株式会社SoundRacer",
+   "ko": "주식회사 SoundRacer"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#315",
+   "ja": "株式会社ジンテーゼ",
+   "ko": "주식회사 진테제"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#316",
+   "ja": "株式会社テコ",
+   "ko": "주식회사 테코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#317",
+   "ja": "株式会社東北新社",
+   "ko": "주식회사 도호쿠 신사"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#318",
+   "ja": "株式会社ノイジークローク",
+   "ko": "주식회사 노이지 클록"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#319",
+   "ja": "株式会社プレミアムエージェンシー",
+   "ko": "주식회사 프리미엄 에이전시"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#320",
+   "ja": "シュガーレスファクトリー",
+   "ko": "슈거리스 팩토리"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#321",
+   "ja": "有限会社青空商会",
+   "ko": "유한회사 아오조라 상회"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#322",
+   "ja": "有限会社クオン",
+   "ko": "유한회사 쿠온"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#323",
+   "ja": "有限会社スタジオ斬",
+   "ko": "유한회사 스튜디오 잔"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#324",
+   "ja": "有限会社ハッピーハプニング",
+   "ko": "유한회사 해피 해프닝"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#325",
+   "ja": "（50音順）",
+   "ko": "（50음순）"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#326",
+   "ja": "QA協力",
+   "ko": "QA 협력"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#327",
+   "ja": "株式会社デジタルハーツ",
+   "ko": "주식회사 디지털 하츠"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#328",
+   "ja": "スペシャルサンクス",
+   "ko": "스페셜 생크스"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#329",
+   "ja": "株式会社スパイク・チュンソフト",
+   "ko": "주식회사 스파이크・춘소프트"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#330",
+   "ja": "ＴＩＰＳスペシャルサンクス",
+   "ko": "TIPS 스페셜 생크스"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#331",
+   "ja": "松野 泰己",
+   "ko": "마츠노 야스미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#332",
+   "ja": "英訳協力",
+   "ko": "영어 번역 협력"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#334",
+   "ja": "アシスタントプロデューサー",
+   "ko": "어시스턴트 프로듀서"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#335",
+   "ja": "高平 香",
+   "ko": "타카히라 카오리"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#336",
+   "ja": "法務",
+   "ko": "법무"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#337",
+   "ja": "金森 勝利　香月 麻見",
+   "ko": "카나모리 카츠토시　카즈키 아사미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#338",
+   "ja": "タイトルデザイン",
+   "ko": "타이틀 디자인"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#339",
+   "ja": "丸屋　教子",
+   "ko": "마루야 쿄코"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#340",
+   "ja": "パッケージデザイン／ソフトウェアマニュアル制作",
+   "ko": "패키지 디자인／소프트웨어 매뉴얼 제작"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#341",
+   "ja": "古田 真一",
+   "ko": "후루타 신이치"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#342",
+   "ja": "宣伝ディレクター",
+   "ko": "홍보 디렉터"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#343",
+   "ja": "臼杵 照裕",
+   "ko": "우스키 테루히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#344",
+   "ja": "広報・宣伝スタッフ",
+   "ko": "홍보・선전 스태프"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#345",
+   "ja": "平塚 浩志　大塚 七奈",
+   "ko": "히라츠카 히로시　오츠카 나나"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#346",
+   "ja": "丸屋 教子　上野 ユミ",
+   "ko": "마루야 쿄코　우에노 유미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#347",
+   "ja": "上田 圭介",
+   "ko": "우에다 케이스케"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#348",
+   "ja": "WEBサイト制作",
+   "ko": "WEB 사이트 제작"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#349",
+   "ja": "黒津 裕司　河野 翔",
+   "ko": "쿠로츠 유지　코노 쇼"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#350",
+   "ja": "WEBサイト制作協力",
+   "ko": "WEB 사이트 제작 협력"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#351",
+   "ja": "小平 麻美",
+   "ko": "코다이라 아사미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#352",
+   "ja": "ソフトウェアマニュアル制作協力",
+   "ko": "소프트웨어 매뉴얼 제작 협력"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#353",
+   "ja": "木下 なつ美　宮佐 梨絵",
+   "ko": "키노시타 나츠미　미야사 리에"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#354",
+   "ja": "営業・企画スタッフ",
+   "ko": "영업・기획 스태프"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#355",
+   "ja": "楽山 克己 ",
+   "ko": "라쿠야마 카츠미"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#356",
+   "ja": "百田 純則　神林 友子　斎藤 圭",
+   "ko": "모모타 스미노리　칸바야시 유코　사이토 케이"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#357",
+   "ja": "小栗 崇裕 　安田 未由紀　小川 理恵　",
+   "ko": "오구리 타카히로　야스다 미유키　오가와 리에"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#358",
+   "ja": "平田 道明　松岡 壮",
+   "ko": "히라타 미치아키　마츠오 소"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#359",
+   "ja": "李 静佳　秋谷 紘香",
+   "ko": "리 세이카　아키야 히로카"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#360",
+   "ja": "グラフィックスーパーバイザー",
+   "ko": "그래픽 슈퍼바이저"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#361",
+   "ja": "楠田 芳晃",
+   "ko": "쿠스다 요시아키"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#362",
+   "ja": "テクニカルスーパーバイザー",
+   "ko": "테크니컬 슈퍼바이저"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#363",
+   "ja": "赤坂 泰洋",
+   "ko": "아카사카 야스히로"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#364",
+   "ja": "エグゼクティブプロデューサー",
+   "ko": "이그제큐티브 프로듀서"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#365",
+   "ja": "制作・著作",
+   "ko": "제작・저작"
+  },
+  {
+   "id": "staffroll_ja.cfg.bin#366",
+   "ja": "株式会社レベルファイブ",
+   "ko": "주식회사 레벨 파이브"
+  }
+ ]
+}

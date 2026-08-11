@@ -1,0 +1,1615 @@
+# -*- coding: utf-8 -*-
+"""Build the Korean test ISO from the translated script JSON.
+
+The engine converts CP932 -> Unicode and binary-searches the font table, so
+Hangul is carried by re-using kanji code points: every distinct syllable is
+assigned one kanji slot, the script is written with those kanji, and the
+font's glyph bitmaps at those slots are redrawn as Hangul.
+
+  python pack_korean.py [--dry]
+"""
+import json, os, glob, re, shutil, struct, sys, collections
+import numpy as np
+from PIL import Image, ImageFont, ImageDraw
+
+import cpk, dnsfile, crilayla, pgd, fnt, xpck, imgp, l5enc, aux_fonts
+import extract_lua, extract_flo, imgp8, menu_tex, menu_ko, cfgbin
+import build_expand2 as B
+
+SRC = r'D:\psp\타임트레블러즈\Time Travelers.iso'
+DST = r'D:\psp\타임트레블러즈\Time Travelers (KR).iso'
+DST_NOFONT = r'D:\psp\타임트레블러즈\Time Travelers (text only).iso'
+JSON_DIR = r'D:\psp\타임트레블러즈\script_fix'      # proof-read dialogue
+UI_DIR = r'D:\psp\타임트레블러즈\ui_json'           # tips, tutorials, menus
+GLYPH_MAP = r'D:\psp\타임트레블러즈\script_json\_glyph_map.json'
+CFG_DIRS = ['psp/txt/tip', 'psp/txt/tutorial', 'psp/txt/help',
+            'psp/txt/outline', 'psp/txt/staffroll']
+XF_DIR = r'D:\psp\타임트레블러즈\extract\fnt'
+MOVIE_DIR = r'D:\psp\타임트레블러즈\movie'      # Sony-encoded subtitled .pmf
+TTF = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                   'NanumSquareNeo-cBd.ttf')
+SYLLABLES = []   # filled in by main(); the size is measured against these
+DNS_LBA, CPK_LBA, EBOOT_LBA, SEC = 285712, 55248, 544, 2048
+EBOOT_DUMP = (r'D:\psp\ppsspp_win\memstick\PSP\SYSTEM\DUMP'
+              '\\NPJH50597_smp_rom.BIN')
+ENC = 'cp932'
+# The dump is a decrypted ELF produced by PPSSPP.  It is useful for reading
+# and translating the strings, but it must not replace the encrypted ~PSP PRX
+# in a real-hardware ISO.  The VC2 hardware build kept its EBOOT untouched.
+HARDWARE_SAFE_EBOOT = True
+
+
+# ---------------------------------------------------------------- assignment
+class Window:
+    """Read-only view of a nested archive inside the decrypted DNS stream."""
+
+    def __init__(self, f, base, size):
+        self.f, self.base, self.size, self.pos = f, base, size, 0
+
+    def seek(self, off, whence=0):
+        self.pos = off
+
+    def read(self, n):
+        self.f.seek(self.base + self.pos)
+        d = self.f.read(min(n, self.size - self.pos))
+        self.pos += len(d)
+        return d
+
+
+def separate_copies(d, c):
+    """psp/cpk/separate/<CH>.cpk each bundle their own copy of the script.
+
+    They are stored uncompressed and the engine reads chapter data from them,
+    so a patch that only touches psp/txt/event/pck leaves half the game
+    running on the original text.
+    """
+    out = {}
+    for e in (x for x in c.files if x['dir'] == 'psp/cpk/separate'):
+        ch = e['name'][:-4]
+        try:
+            inner = cpk.CPK(Window(d, e['offset'], e['size']))
+        except Exception:
+            continue
+        for x in inner.files:
+            if x['dir'] == 'psp/txt/event/pck' and x['name'] == ch + '.pck':
+                out[ch] = (e['offset'] + x['offset'], x['size'], x['extract'])
+                break
+    return out
+
+
+def load_ui():
+    """id -> (ja, ko) for the tip/tutorial/help/outline/staffroll/menu text."""
+    out = {}
+    for p in sorted(glob.glob(os.path.join(UI_DIR, '*.json'))):
+        b = os.path.basename(p)
+        if b == 'manifest.json' or b.startswith('_'):
+            continue                       # _sprites.json is a coordinate table
+        for e in json.load(open(p, encoding='utf-8'))['entries']:
+            if e.get('ko', '').strip():
+                out[e['id']] = (e['ja'], e['ko'])
+    return out
+
+
+def split_cfg(d):
+    """A .cfg.bin is one bare blob: strings sit at the end, count in the header."""
+    if len(d) < 16:
+        return None
+    cnt = struct.unpack('<I', d[12:16])[0]
+    if not 0 < cnt < 4096:
+        return None
+    end = len(d)
+    while end > 0 and d[end - 1] == 0xFF:
+        end -= 1
+    for base in range(end - 1, 0, -1):
+        seg = d[base:end]
+        if not seg.endswith(b'\x00') or seg.count(b'\x00') != cnt:
+            continue
+        try:
+            seg.decode(ENC)
+        except UnicodeDecodeError:
+            continue
+        return base, end, seg.split(b'\x00')[:-1]
+    return None
+
+
+def patch_cfg(c, d, ui, table):
+    """Same treatment as a dialogue blob: swap the strings, then move every
+    byte offset in the record area that pointed at them.
+
+    The blob keeps its original uncompressed length, so ExtractSize never
+    changes; only the stored size does, and only for the compressed ones.
+    """
+    edits, done, skipped = [], 0, []
+    trimmed = collections.Counter()
+    toc = cpk.read_chunk(d, c.header['TocOffset'], b'TOC ')
+    row_of = {(r['DirName'], r['FileName']): i for i, r in enumerate(toc.rows)}
+    toc_base = c.header['TocOffset'] + 24 + toc.rows_off
+    for e in sorted((x for x in c.files if x['dir'] in CFG_DIRS),
+                    key=lambda x: x['name']):
+        data = c.read(e)
+        got = split_cfg(data)
+        if not got:
+            continue
+        base, end, strs = got
+        new = list(strs)
+        hit = 0
+        for i, s in enumerate(strs):
+            k = '%s#%d' % (e['name'], i)
+            if k not in ui:
+                continue
+            ja, ko = ui[k]
+            try:
+                new[i] = recode(normalize(ja, ko), table)
+            except UnicodeEncodeError:
+                continue
+            hit += 1
+        if not hit:
+            continue
+        # These files carry dense offset tables -- the tip and tutorial
+        # indexes have hundreds of entries. cfgbin reads where those offsets
+        # are, so the table can be rebuilt at whatever length the Korean needs
+        # and every offset that pointed into it moved to match; it only hands
+        # back a file it can reproduce byte for byte. Anything it will not
+        # vouch for keeps each string in the slot it already occupies and has
+        # the few that do not fit trimmed, so nothing moves.
+        cfg = cfgbin.parse(data)
+        if cfg is not None:
+            rebuilt = [s for _, s in cfg.strs]
+            at, cur = cfg.index(), base - cfg.base
+            for i, s in enumerate(strs):
+                j = at.get(cur)
+                if j is not None:
+                    rebuilt[j] = new[i]
+                cur += len(s) + 1
+            blob = cfg.pack(rebuilt)
+        else:
+            for i in range(len(new)):
+                while len(new[i]) > len(strs[i]):
+                    new[i] = new[i].decode(ENC)[:-1].encode(ENC)
+                    trimmed[e['name']] += 1
+            keep = B.fixed_slots(strs, new)
+            if keep is None:
+                continue
+            blob = bytearray(data[:base]) + keep + data[end:]
+        grew_here = len(blob) > len(data)
+        if not grew_here:
+            blob = bytes(blob) + bytes([0xFF]) * (len(data) - len(blob))
+        blob = bytes(blob)
+
+        row = toc_base + row_of[(e['dir'], e['name'])] * toc.row_len
+        nxt = min(x['offset'] for x in c.files if x['offset'] > e['offset'])
+        slot = nxt - e['offset']
+
+        if e['size'] == e['extract'] and not grew_here:
+            edits.append((e['offset'], blob))            # stays raw, same size
+        else:
+            # Offsets inside a .cfg.bin are file-relative, so it may grow; pay
+            # for it with compression and tell the TOC both new sizes.
+            comp = crilayla.compress(blob, effort=256)
+            if len(comp) > slot:
+                skipped.append((e['name'], len(comp), slot))
+                continue
+            edits.append((e['offset'], comp))
+            edits.append((row + 8, struct.pack('>I', len(comp))))
+            edits.append((row + 12, struct.pack('>I', len(blob))))
+        done += hit
+    if trimmed:
+        print('  trimmed to fit their slot: %s'
+              % dict(trimmed.most_common(5)))
+    return edits, done, skipped
+
+
+def patch_eboot(table):
+    """Rewrite the system messages compiled into the executable.
+
+    A PPSSPP dump is a decrypted ELF, whereas the disc carries an encrypted
+    ~PSP PRX.  Without a PRX re-encryptor, replacing the whole EBOOT is not
+    hardware-safe, so the default build preserves the retail executable.
+    The JSON remains available for a future properly re-encrypted build.
+
+    Only what the game's own renderer draws is touched; see eboot_ko.
+    """
+    if HARDWARE_SAFE_EBOOT:
+        return [], 0, ['hardware-safe build: encrypted EBOOT.BIN preserved']
+    if not os.path.exists(EBOOT_DUMP):
+        return [], 0, ['no decrypted dump at %s' % EBOOT_DUMP]
+    d = bytearray(open(EBOOT_DUMP, 'rb').read())
+    doc = json.load(open(os.path.join(UI_DIR, 'eboot.json'), encoding='utf-8'))
+    done, over = 0, []
+    for e in doc['entries']:
+        if not e.get('ko', '').strip():
+            continue
+        off = int(e['id'].split('@')[1])
+        room = e['room']
+        if bytes(d[off:off + room]) != e['ja'].encode(ENC):
+            over.append((e['id'], 'dump no longer matches'))
+            continue
+        try:
+            raw = recode(e['ko'], table)
+        except UnicodeEncodeError:
+            continue
+        if len(raw) > room:
+            over.append((e['id'], '%d > %d bytes' % (len(raw), room)))
+            continue
+        d[off:off + room] = raw + b'\x00' * (room - len(raw))
+        done += 1
+    return [(EBOOT_LBA * SEC, bytes(d))], done, over
+
+
+def patch_movie():
+    """Drop the subtitled opening in over the original.
+
+    Built separately by op_build.py -- decoding and re-encoding the film takes
+    a minute, and nothing else in the build depends on it. It is muxed back
+    into the original container at exactly the original length, so it goes in
+    where it already sits, uncompressed, with nothing in the CPK to update.
+    """
+    out = []
+    outer = cpk.CPK(SRC, base=CPK_LBA * SEC)
+    for e in (x for x in outer.files if x['dir'] == 'psp/mov'):
+        p = os.path.join(MOVIE_DIR, e['name'])
+        if not os.path.exists(p):
+            continue
+        blob = open(p, 'rb').read()
+        if len(blob) != e['size'] or blob[:8] != b'PSMF0015':
+            print('  %s: %d bytes, slot is %d -- skipped'
+                  % (e['name'], len(blob), e['size']))
+            continue
+        out.append((CPK_LBA * SEC + e['offset'], blob))
+    return out
+
+
+def patch_menu(c, d):
+    """Redraw the Korean into the menu art.
+
+    The button hints are pictures, not text -- furigana and all -- so the
+    label rectangles come from the archive's own vertex buffer and the
+    Korean is drawn into them. The texture keeps its length, so the .xa
+    around it does not have to move.
+    """
+    edits, done, skipped = [], 0, []
+    toc = cpk.read_chunk(d, c.header['TocOffset'], b'TOC ')
+    row_of = {(r['DirName'], r['FileName']): i for i, r in enumerate(toc.rows)}
+    toc_base = c.header['TocOffset'] + 24 + toc.rows_off
+    # A texture can need both treatments -- the character-select screen has
+    # its guidance line on nothing and its name plates on colour -- so the
+    # jobs for one texture are a list, not one entry that replaces the other.
+    jobs = {}
+    for tag, table in (('clear', menu_ko.SPRITES), ('over', menu_ko.OVER)):
+        for name, sheets in table.items():
+            for k, v in sheets.items():
+                jobs.setdefault(name, {}).setdefault(k, []).append((tag, v))
+    for name, sheets in jobs.items():
+        e = [x for x in c.files if x['name'] == name][0]
+        blob = bytearray(c.read(e))
+        parts = {p['name']: p for p in xpck.parse(bytes(blob))}
+        hit = 0
+        for xi_name, todo in sheets.items():
+            xi = parts[xi_name]['data']
+            ind, _ = imgp8.indices(xi)
+            pal = imgp8.palette(xi)
+            for mode, spec in todo:
+                if mode == 'clear':
+                    for box, text in spec.items():
+                        if menu_tex.draw(ind, pal, box, text):
+                            hit += 1
+                else:
+                    boxes, bg = spec
+                    for x0, y0, x1, y1, text in boxes:
+                        if menu_tex.draw_over(ind, pal, (x0, y0, x1, y1),
+                                              text, bg):
+                            hit += 1
+            new = menu_tex.encode(xi, ind)
+            if new is None or len(new) != len(xi):
+                skipped.append((name, xi_name))
+                continue
+            off = parts[xi_name]['offset']
+            blob[off:off + len(new)] = new
+        if not hit:
+            continue
+        out = bytes(blob)
+        nxt = min(x['offset'] for x in c.files if x['offset'] > e['offset'])
+        row = toc_base + row_of[(e['dir'], e['name'])] * toc.row_len
+        if e['size'] == e['extract']:
+            edits.append((e['offset'], out))
+        else:
+            comp = crilayla.compress(out, effort=256)
+            if len(comp) > nxt - e['offset']:
+                skipped.append((name, 'too big'))
+                continue
+            edits += [(e['offset'], comp),
+                      (row + 8, struct.pack('>I', len(comp))),
+                      (row + 12, struct.pack('>I', len(out)))]
+        done += hit
+    return edits, done, skipped
+
+
+def widen(text):
+    """Latin and digits to their full-width forms.
+
+    The telop fonts carry no half-width glyphs at all -- the chart's own
+    '爆発３０秒前' is full-width -- so an ASCII 30 drew nothing.
+    """
+    return ''.join(chr(ord(ch) - 0x20 + 0xFF00)
+                   if '0' <= ch <= '9' or 'A' <= ch <= 'Z' or 'a' <= ch <= 'z'
+                   else ch for ch in text)
+
+
+def patch_flo(c, d, ui, table):
+    """The time-travel chart lives in psp/script/tt1.flo.
+
+    Its node titles and the telops that head each scene -- '爆発30秒前' and
+    the rest -- were never translated, and untranslated Japanese does not
+    stay Japanese here: the kanji it uses are the ones the Hangul rides on,
+    so it drew nonsense syllables. Each field is written back inside the
+    length it already had; nothing addresses them from outside.
+    """
+    p = os.path.join(UI_DIR, 'flo.json')
+    if not os.path.exists(p):
+        return [], 0, []
+    ko = {e['ja']: e['ko']
+          for e in json.load(open(p, encoding='utf-8'))['entries']
+          if e.get('ko', '').strip()}
+    e = [x for x in c.files if x['name'] == 'tt1.flo'][0]
+    data = bytearray(c.read(e))
+    done, over = 0, []
+    for a, b, ja in sorted(extract_flo.spans(bytes(data)), key=lambda r: -r[0]):
+        if ja not in ko:
+            continue
+        try:
+            raw = recode(widen(ko[ja]), table)
+        except UnicodeEncodeError:
+            continue
+        if len(raw) + 1 > b - a:
+            over.append((ja[:24], len(raw), b - a))
+            continue
+        # The field is read to its NUL, and the original filled it exactly.
+        # A shorter translation has to bring its own terminator or the
+        # filler is read as part of the string -- which is what put a row of
+        # slashes after '폭발 30초 전'.
+        data[a:b] = raw + b'\x00' + b'\xff' * (b - a - len(raw) - 1)
+        done += 1
+    if not done:
+        return [], 0, over
+    blob = bytes(data)
+    comp = crilayla.compress(blob, effort=256)
+    toc = cpk.read_chunk(d, c.header['TocOffset'], b'TOC ')
+    row_of = {(r['DirName'], r['FileName']): i for i, r in enumerate(toc.rows)}
+    row = (c.header['TocOffset'] + 24 + toc.rows_off
+           + row_of[(e['dir'], e['name'])] * toc.row_len)
+    nxt = min(x['offset'] for x in c.files if x['offset'] > e['offset'])
+    if len(comp) <= nxt - e['offset']:
+        return [(e['offset'], comp),
+                (row + 8, struct.pack('>I', len(comp)))], done, over
+    # Korean does not compress the way the Japanese did -- the kana it
+    # replaces are a handful of repeated byte values, the kanji the Hangul
+    # rides on are scattered -- so the file no longer fits where it sat.
+    # The archive has megabytes of unused tail; move it there and point the
+    # directory entry at the new place.
+    end = max(x['offset'] + x['size'] for x in c.files)
+    tail = (max(end, c.header['ContentOffset'] + c.header['ContentSize'])
+            + SEC - 1) // SEC * SEC
+    # Korean does not compress the way the Japanese did -- the kana it
+    # replaces are a handful of repeated byte values, the kanji the Hangul
+    # rides on are scattered -- so the file no longer fits where it sat.
+    # Past the end of the archive is no good (the reader would not follow),
+    # but every file is padded up to a 2048 boundary, and a dozen of those
+    # pads together are more than enough. Slide the run that follows forward
+    # until the slack absorbs the growth.
+    # Sliding everything after it does not work -- the pads are smaller than
+    # the 2048 alignment, so the shift never gets absorbed and 1,588 files
+    # end up moving. What does work is repacking just this file and the nine
+    # .scn that follow it: those are Korean now too and compress smaller, and
+    # together the ten sit in one region that nothing else reaches into.
+    order = sorted(c.files, key=lambda x: x['offset'])
+    i = order.index(e)
+    group = [e]
+    for x in order[i + 1:]:
+        if not x['name'].endswith('.scn'):
+            break
+        group.append(x)
+    limit = order[i + len(group)]['offset']
+    blobs = {e['name']: comp}
+    for x in group[1:]:
+        blobs[x['name']] = crilayla.compress(scn_blob(c, x, ui, table)[0],
+                                             effort=256)
+    cursor = e['offset']
+    zero = min(c.header['TocOffset'], c.header['ContentOffset'])
+    edits = []
+    for x in group:
+        b = blobs[x['name']]
+        end = cursor + len(b)
+        if end > limit:
+            print('  tt1.flo does not fit even after repacking; left alone')
+            return [], 0, over + [('tt1.flo', len(comp), nxt - e['offset'])]
+        r = (c.header['TocOffset'] + 24 + toc.rows_off
+             + row_of[(x['dir'], x['name'])] * toc.row_len)
+        edits += [(cursor, b), (r + 8, struct.pack('>I', len(b))),
+                  (r + 16, struct.pack('>Q', cursor - zero))]
+        x['offset'] = cursor
+        x['size'] = len(b)
+        x['placed'] = True          # patch_scn must not compress it again
+        # 16, not the archive's usual 2048: rounding each of these up to a
+        # sector gives back exactly what the shorter Korean saved, and then
+        # nothing fits. The reader seeks to the offset the row gives it.
+        cursor = (end + 15) // 16 * 16
+    print('  tt1.flo grew to %d; repacked with %d .scn into %d..%d'
+          % (len(comp), len(group) - 1, e['offset'], limit))
+    return edits, done, over
+
+
+def patch_lua(c, d, table):
+    """Menu and system wording lives in psp/script/lua/**/*.lua.
+
+    The scripts are plain Lua source with every literal written as
+    string.char(0x..,..), so the text can simply be spliced -- nothing
+    addresses it by offset. Splices run back to front to keep the offsets
+    that follow them valid.
+
+    Asset and animation names are left alone: they are lookup keys, and
+    Chr_SetMotion would find nothing if they were translated.
+    """
+    ko = {}
+    for e in json.load(open(os.path.join(UI_DIR, 'lua.json'),
+                            encoding='utf-8'))['entries']:
+        if e.get('ko', '').strip():
+            ko[e['id']] = e['ko']
+    edits, done, skipped = [], 0, []
+    toc = cpk.read_chunk(d, c.header['TocOffset'], b'TOC ')
+    row_of = {(r['DirName'], r['FileName']): i for i, r in enumerate(toc.rows)}
+    toc_base = c.header['TocOffset'] + 24 + toc.rows_off
+    for e in sorted((x for x in c.files if x['name'].endswith('.lua')),
+                    key=lambda x: (x['dir'], x['name'])):
+        src = c.read(e)
+        out = bytearray(src)
+        hit = 0
+        for form, a, b, _ in sorted(extract_lua.strings(src),
+                                    key=lambda r: -r[1]):
+            k = '%s@%d' % (e['name'], a)
+            if k not in ko:
+                continue
+            try:
+                raw = recode(ko[k], table)
+            except UnicodeEncodeError:
+                continue
+            out[a:b] = extract_lua.encode(form, raw)
+            hit += 1
+        if not hit:
+            continue
+        blob = bytes(out)
+        nxt = min(x['offset'] for x in c.files if x['offset'] > e['offset'])
+        slot = nxt - e['offset']
+        row = toc_base + row_of[(e['dir'], e['name'])] * toc.row_len
+        if e['size'] == e['extract'] and len(blob) <= slot:
+            edits.append((e['offset'], blob))
+            edits.append((row + 8, struct.pack('>I', len(blob))))
+            edits.append((row + 12, struct.pack('>I', len(blob))))
+        else:
+            comp = crilayla.compress(blob, effort=256)
+            if len(comp) > slot:
+                skipped.append((e['name'], len(comp), slot))
+                continue
+            edits.append((e['offset'], comp))
+            edits.append((row + 8, struct.pack('>I', len(comp))))
+            edits.append((row + 12, struct.pack('>I', len(blob))))
+        done += hit
+    return edits, done, skipped
+
+
+SCN_TABLES = (0x30, 0x34, 0x38)     # header words holding each table's start
+
+
+def scn_blob(c, e, ui, table):
+    """One .scn with its Korean written in. Returns (blob, replaced, trimmed).
+
+    Nothing moves: every string stays at its own offset and keeps its own
+    length, the leftover filled with spaces.
+    """
+    by_text = {ja: ko for k, (ja, ko) in ui.items() if k.startswith('scn#')}
+    data = c.read(e)
+    bounds = [struct.unpack('<I', data[o:o + 4])[0] for o in SCN_TABLES]
+    bounds.append(len(data))
+    out = bytearray(data)
+    hit, cut, idx = 0, 0, 0
+    for t in range(len(bounds) - 1):
+        a, b = bounds[t], bounds[t + 1]
+        body = bytearray()
+        for raw in data[a:b].split(b'\x00')[:-1]:
+            k = 'scn#%d' % idx
+            idx += 1
+            new = raw
+            pair = ui.get(k)
+            if pair is None and raw:
+                try:
+                    txt = raw.decode(ENC)
+                except UnicodeDecodeError:
+                    txt = None
+                if txt in by_text:
+                    pair = (txt, by_text[txt])
+            if pair and raw:
+                ja, ko = pair
+                try:
+                    new = recode(normalize(ja, ko), table)
+                except UnicodeEncodeError:
+                    new = raw
+                while len(new) > len(raw):
+                    new = new.decode(ENC)[:-1].encode(ENC)
+                    cut += 1
+                if new != raw:
+                    hit += 1
+            body += new + b' ' * (len(raw) - len(new)) + b'\x00'
+        assert len(body) == b - a, (e['name'], t, len(body), b - a)
+        out[a:b] = body
+    return bytes(out), hit, cut
+
+
+def patch_scn(c, d, ui, table):
+    """Choice text lives in psp/script/*.scn. All nine files are identical
+    here, so one translation covers them all.
+
+    There are three string tables, not one: choices, time-stop titles and
+    hints, each starting at an address the header records. Treating the lot
+    as a single table and repacking it left the second and third tables
+    reading from the middle of the first -- which is how a choice box ended
+    up showing someone else's line with its first characters missing.
+
+    So nothing moves. Every string stays at its own offset and keeps its own
+    length, the leftover filled with spaces: shorter would let the reader run
+    into the next slot, and 0xFF filler is what put ????? in front of the
+    choices before.
+    """
+    edits, done, short = [], 0, 0
+    # The extraction dropped repeats, so a line that appears twice only has a
+    # translation under its first index. Look the text up as well.
+    by_text = {ja: ko for k, (ja, ko) in ui.items() if k.startswith('scn#')}
+    toc = cpk.read_chunk(d, c.header['TocOffset'], b'TOC ')
+    row_of = {(r['DirName'], r['FileName']): i for i, r in enumerate(toc.rows)}
+    toc_base = c.header['TocOffset'] + 24 + toc.rows_off
+    for e in sorted((x for x in c.files if x['name'].endswith('.scn')),
+                    key=lambda x: x['name']):
+        if e.get('placed'):
+            done += 1               # already written by the chart repack
+            continue
+        blob, hit, cut = scn_blob(c, e, ui, table)
+        short += cut
+        if not hit:
+            continue
+        comp = crilayla.compress(blob, effort=256)
+        nxt = min(x['offset'] for x in c.files if x['offset'] > e['offset'])
+        if len(comp) > nxt - e['offset']:
+            continue
+        row = toc_base + row_of[(e['dir'], e['name'])] * toc.row_len
+        edits.append((e['offset'], comp))
+        edits.append((row + 8, struct.pack('>I', len(comp))))
+        done += hit
+    if short:
+        print('  %d choice strings trimmed to their slot' % short)
+    return edits, done
+
+
+def load_translation():
+    out = {}
+    for p in sorted(glob.glob(os.path.join(JSON_DIR, '*.json'))):
+        b = os.path.basename(p)
+        if b == 'manifest.json' or b.startswith('_'):
+            continue
+        doc = json.load(open(p, encoding='utf-8'))
+        for e in doc['entries']:
+            if e.get('ko'):
+                out[e['id']] = e['ko']
+    return out
+
+
+# Fonts the engine draws dialogue with. A code point must exist in all of
+# them, otherwise scenes that use one of the others render nothing at all.
+DIALOGUE_FONTS = [('nrm_sub.xf', 'outer'),
+                  ('nrm_main.xf', 'outer'),
+                  ('ttp_main.xf', 'dns')]
+
+
+def load_fonts(dnsf):
+    outer = cpk.CPK(SRC, base=CPK_LBA * SEC)
+    inner = cpk.CPK(dnsf)
+    out = {}
+    for name, where in DIALOGUE_FONTS:
+        c = outer if where == 'outer' else inner
+        e = [x for x in c.files if x['name'] == name][0]
+        files = {f['name']: f for f in xpck.parse(c.read(e))}
+        out[name] = {'where': where, 'entry': e, 'files': files,
+                     'meta': fnt.parse(files['FNT.bin']['data'])}
+    return out
+
+
+def atlas_ink(F, drop_kanji=True):
+    """Which atlas pixels are inked, per texture.
+
+    The kanji are optionally cleared first: the translation borrows their
+    slots and never draws the rest, so their ink is not an obstacle -- and
+    the boxes the font declares overlap each other anyway, which makes them
+    useless as a measure of the room actually available.
+    """
+    m = F['meta']
+    out = {}
+    for i in range(m['textures']):
+        aw, ah, rgba, _ = imgp.decode(F['files']['%03d.xi' % i]['data'])
+        out[i] = (np.frombuffer(rgba, np.uint8)
+                  .reshape(ah, aw, 4)[:, :, 3] > 0).copy()
+    if drop_kanji:
+        for c in m['large']:
+            if 0x4E00 <= c['code'] <= 0x9FFF:
+                _, _, w, h = m['sizes'][c['size']]
+                out[c['tex']][c['y']:c['y'] + h, c['x']:c['x'] + w] = False
+    return out
+
+
+def has_room(F, ink, c, w, h):
+    """Can a w x h box be drawn at this glyph's place without hitting another?"""
+    _, _, gw, gh = F['meta']['sizes'][c['size']]
+    a = ink[c['tex']]
+    patch = a[c['y']:c['y'] + h, c['x']:c['x'] + w]
+    if patch.shape != (h, w):
+        return False
+    patch = patch.copy()
+    patch[:min(gh, h), :min(gw, w)] = False       # its own box is ours to use
+    return not patch.any()
+
+
+def slot_pool(fonts):
+    """Full-width kanji code points every dialogue font can host a box in."""
+    sets = []
+    for f in fonts.values():
+        ink = f.setdefault('_ink', atlas_ink(f))
+        s = set()
+        for c in f['meta']['large']:
+            if not 0x4E00 <= c['code'] <= 0x9FFF or c['advance'] < 13:
+                continue
+            if not has_room(f, ink, c, UNIFORM[2], UNIFORM[3]):
+                continue
+            try:
+                chr(c['code']).encode(ENC)
+            except UnicodeEncodeError:
+                continue
+            s.add(c['code'])
+        sets.append(s)
+    return sorted(set.intersection(*sets))
+
+
+AUX_TEXT = {'telop_main.xf': ['eboot.json', 'lua.json'],
+            'staffroll.xf': ['staffroll.json']}
+
+
+def aux_priority(dnsf, syllables):
+    """Which syllables the small fonts draw, and what they can already show.
+
+    Returns [(syllables, code points)] with the syllables both fonts need
+    first: those can only come from the code points both already carry, so
+    they have to be placed before anything eats into that overlap.
+    """
+    c = cpk.CPK(dnsf)
+    need, codes = {}, {}
+    for name, files in AUX_TEXT.items():
+        e = [x for x in c.files if x['name'] == name][0]
+        parts = {f['name']: f for f in xpck.parse(c.read(e))}
+        m = fnt.parse(parts['FNT.bin']['data'])
+        codes[name] = {ch['code'] for ch in m['large']
+                       if 0x4E00 <= ch['code'] <= 0x9FFF
+                       and m['sizes'][ch['size']][2] >= UNIFORM[2] - 1
+                       and m['sizes'][ch['size']][3] >= UNIFORM[3] - 1}
+        s = set()
+        for f in files:
+            p = os.path.join(UI_DIR, f)
+            if os.path.exists(p):
+                for x in json.load(open(p, encoding='utf-8'))['entries']:
+                    s.update(ch for ch in x.get('ko', '') if ch in syllables)
+        need[name] = s
+    a, b = AUX_TEXT
+    both = need[a] & need[b]
+    out = [(both, codes[a] & codes[b]),
+           (need[a] - both, codes[a]), (need[b] - both, codes[b])]
+    print('  small fonts: %s needs %d syllables, %s needs %d, %d shared'
+          % (a, len(need[a]), b, len(need[b]), len(both)))
+    return out
+
+
+def assign(syllables, fonts, prefer=()):
+    """Pick one kanji slot per syllable, no two of them overlapping.
+
+    At the size the boxes have grown to they are wider than the tightest
+    spacing the atlas uses, so a pair of neighbours would share a column and
+    whichever is drawn second would clip the first. Slots are taken in order
+    and one that lands on an already-taken box is skipped.
+
+    `prefer` is [(syllables, code points)], most constrained first. The small
+    telop and staff-roll fonts carry only a few hundred kanji each and have
+    almost no free slots left, so a syllable they have to draw is given a
+    code point they already carry -- then nothing has to be re-pointed at
+    all. Without this the chapter card came out as ?????.
+    """
+    pool = slot_pool(fonts)
+    taken = {n: collections.defaultdict(list) for n in fonts}
+    usable = []
+    for code in pool:
+        ok = True
+        for n, f in fonts.items():
+            g = next(c for c in f['meta']['large'] if c['code'] == code)
+            for x, y in taken[n][g['tex']]:
+                if (abs(g['x'] - x) < UNIFORM[2]
+                        and abs(g['y'] - y) < UNIFORM[3]):
+                    ok = False
+                    break
+            if not ok:
+                break
+        if not ok:
+            continue
+        for n, f in fonts.items():
+            g = next(c for c in f['meta']['large'] if c['code'] == code)
+            taken[n][g['tex']].append((g['x'], g['y']))
+        usable.append(code)
+    if len(usable) < len(syllables):
+        raise RuntimeError('need %d slots, %d usable without overlap'
+                           % (len(syllables), len(usable)))
+
+    out, used = {}, set()
+    left = sorted(syllables)
+    for want, codes in prefer:
+        pick = [c for c in usable if c in codes and c not in used]
+        for s in list(left):
+            if s not in want or not pick:
+                continue
+            out[s] = pick.pop(0)
+            used.add(out[s])
+            left.remove(s)
+    rest = [c for c in usable if c not in used]
+    for i, s in enumerate(left):
+        out[s] = rest[i]
+    return out
+
+
+import re as _re
+_ANYTAG = _re.compile(r'<[^>]{0,16}>')
+_GOODTAG = _re.compile(r'^</?[A-Za-z][A-Za-z0-9]*>$')
+QUOTES = '「」『』“”‘’"＜＞〈〉'
+_TIP = _re.compile(r'(<TIP\d*>)(.*?)(</TIP>)', _re.S)
+_RUBY = _re.compile(r'^\[([^/\]]*)/([^\]]*)\]$')
+
+
+def normalize(ja, ko):
+    """Undo translator habits the engine cannot parse.
+
+    The script marks speech as 이름「…」; the engine scans for those brackets
+    to split speaker from line, so a translation that swapped them for ASCII
+    quotes leaves it searching for a close bracket that never arrives.
+    """
+    # Tags the source itself uses are authoritative, whatever they look like:
+    # <ICON"font_18"> is real markup, not a typo to be cleaned up.
+    known = set(_ANYTAG.findall(ja))
+
+    def fixtag(m):
+        s = m.group(0)
+        if s in known or _GOODTAG.match(s):
+            return s
+        inner = _re.sub(r'[^A-Za-z0-9/]', '', s[1:-1])
+        return '<%s>' % inner if inner else ''
+    ko = _ANYTAG.sub(fixtag, ko)
+
+    # Inside <TIPnnn>…</TIP> the [base/key] brackets are structural, not
+    # furigana: the engine reads the key to find the glossary entry. Plain
+    # ruby can safely lose its brackets, this cannot.
+    ja_tips = _TIP.findall(ja)
+    if not ja_tips and '<TIP' in ko:        # invented glossary reference
+        ko = _re.sub(r'</?TIP\d*>', '', ko)
+    if ja_tips and len(ja_tips) == len(_TIP.findall(ko)):
+        src = iter(ja_tips)
+
+        def fix(m):
+            o = next(src)
+            inner, ja_inner = m.group(2), o[1]
+            mj = _RUBY.match(ja_inner)
+            if mj:
+                # 117 of the source's own TIP tags hold plain text, so the
+                # brackets are not required -- what broke the parser before was
+                # a bare "/reading" left dangling. Drop the furigana instead of
+                # re-attaching it: Japanese kana above a Korean word is wrong.
+                key = mj.group(2)
+                if inner.endswith('/' + key):
+                    inner = inner[:-len(key) - 1]
+                inner = _RUBY.sub(lambda r: r.group(1), inner)
+                inner = inner.replace('[', '').replace(']', '')
+                if '/' in inner and '[' not in inner:
+                    inner = inner.split('/')[0]
+            return m.group(1) + inner + m.group(3)
+        ko = _TIP.sub(fix, ko)
+
+    # Re-impose the source's bracket sequence positionally: whatever quote
+    # characters the translation used, the nth one becomes the nth of the
+    # original. Only safe when the counts agree, so bail out otherwise.
+    src = [c for c in ja if c in QUOTES]
+    dst = [c for c in ko if c in QUOTES]
+    if src and len(src) == len(dst) and src != dst:
+        it = iter(src)
+        ko = ''.join(next(it) if c in QUOTES else c for c in ko)
+
+    # Whatever happened above, never ship an unclosed bracket: the original
+    # script has none, and the engine scans forward for the closer.
+    for op, cl in (('「', '」'), ('『', '』'), ('＜', '＞')):
+        d = ko.count(op) - ko.count(cl)
+        if d > 0:
+            ko += cl * d
+        while d < 0:
+            i = ko.rfind(cl)
+            if i < 0:
+                break
+            ko = ko[:i] + ko[i + 1:]
+            d += 1
+    return ko
+
+
+# Punctuation the translation uses that some dialogue font has no glyph for.
+# The Japanese script used the full-width forms throughout; the half-width
+# ones the translator reached for are missing from at least one font, and the
+# engine draws its missing-glyph box for them.
+try:
+    PUNCT = json.load(open(r'D:\psp\타임트레블러즈\script_json\_punct_map.json',
+                           encoding='utf-8'))
+except OSError:
+    PUNCT = {}
+
+
+# Characters the translation uses that CP932 has no room for.
+FIXUP = {
+    '·': '・',   # ·  -> ・
+    '​': '',         # zero-width space -> drop
+    '≤': '≦',   # ≤  -> ≦
+    '₩': 'W',        # ₩  -> W
+    'ㅀ': '',         # stray lone jamo -> drop
+}
+
+
+FULL_STOP = '．'                  # U+FF0E, not the ideographic 。
+_TAG = re.compile(r'(<[^>]{0,24}>)')
+# every period but a decimal one, plus the ideographic stops the translation
+# carried over from the Japanese
+_DOT = re.compile(r'(?<!\d)\.|\.(?!\d)|[。｡]')
+
+
+def full_stops(text):
+    """One sentence end throughout, the Korean full-width period.
+
+    The translator typed an ASCII period in most places and left the
+    Japanese 。 in others, so the two were showing side by side. Decimal
+    points keep the half-width form, and tags are left alone.
+    """
+    return ''.join(p if p.startswith('<') else _DOT.sub(FULL_STOP, p)
+                   for p in _TAG.split(text))
+
+
+def recode(text, table):
+    """Hangul -> assigned kanji, then CP932 bytes."""
+    text = full_stops(text)
+    for a, b in PUNCT.items():
+        if a in text:
+            text = text.replace(a, b)
+    for a, b in FIXUP.items():
+        if a in text:
+            text = text.replace(a, b)
+    out = []
+    for ch in text:
+        g = table.get(ch)
+        out.append(chr(g) if g else ch)
+    return ''.join(out).encode(ENC)
+
+
+# ---------------------------------------------------------------- font redraw
+def _smallest(raw, orig_blk, room):
+    """Re-encode with whichever method still fits the original block."""
+    out = []
+    try:
+        out.append(l5enc.block(raw, l5enc.tree_of(orig_blk)))
+    except Exception:
+        pass
+    out.append(l5enc.lz10_block(raw))
+    out = [b for b in out if len(b) <= room]
+    return min(out, key=len) if out else None
+
+
+UNIFORM = (0, 4, 14, 14)      # offX, offY, w, h -- as large as the atlas will
+UNIFORM_ADV = 14              # take; the pen step stays what the kanji used
+
+
+def rebuild_fnt(F, codes):
+    """Give every borrowed slot one box and one advance.
+
+    Those slots come in 15 different boxes and two advances; drawing into each
+    as-is is what made the text ripple. There is no spare size-table entry, so
+    one that only kanji use is redefined and everything points at it. 13x13
+    fits inside every allocation in the atlas, so nothing bleeds into the
+    neighbouring glyph.
+    """
+    data = F['files']['FNT.bin']['data']
+    h = struct.unpack('<6H', data[0x1C:0x28])
+    sz_off, sz_cnt, lg_off, lg_cnt, sm_off = h[0] * 4, h[1], h[2] * 4, h[3], h[4] * 4
+    m = F['meta']
+
+    owner = collections.defaultdict(set)
+    for c in m['large']:
+        owner[c['size']].add(c['code'])
+    for c in m['small']:
+        owner[c['size']].add(-1)
+    spare = [i for i, cs in owner.items()
+             if -1 not in cs and all(0x4E00 <= x <= 0x9FFF for x in cs)]
+    if not spare:
+        raise RuntimeError('no size entry free to redefine')
+
+    sz_blk = data[sz_off:lg_off]
+    lg_blk = data[lg_off:sm_off]
+    sz_base = bytearray(imgp.l5_decompress(sz_blk)[:sz_cnt * 4])
+    lg_base = imgp.l5_decompress(lg_blk)[:lg_cnt * 8]
+
+    # The re-encode reuses the file's own Huffman tree, so how well it packs
+    # depends on which index we point at. Try the candidates and keep one
+    # that still fits its block.
+    best = None
+    for slot in sorted(spare, key=lambda i: -len(owner[i])):
+        sz_raw = bytearray(sz_base)
+        sz_raw[slot * 4:slot * 4 + 4] = struct.pack('<bbBB', *UNIFORM)
+        sz_new = _smallest(bytes(sz_raw), sz_blk, lg_off - sz_off)
+        if sz_new is None:
+            continue
+        lg_raw = bytearray(lg_base)
+        packed = (slot & 0x3FF) | (UNIFORM_ADV << 10)
+        n = 0
+        for i, c in enumerate(m['large']):
+            if c['code'] in codes:
+                lg_raw[i * 8 + 2:i * 8 + 4] = struct.pack('<H', packed)
+                n += 1
+        lg_new = _smallest(bytes(lg_raw), lg_blk, sm_off - lg_off)
+        if lg_new is not None:
+            best = (sz_new, lg_new, n)
+            break
+    if best is None:
+        return None            # caller falls back to bottom-aligned drawing
+    sz_new, lg_new, n = best
+
+    out = bytearray(data)
+    out[sz_off:lg_off] = sz_new + bytes(lg_off - sz_off - len(sz_new))
+    out[lg_off:sm_off] = lg_new + bytes(sm_off - lg_off - len(lg_new))
+    return bytes(out), n
+
+
+def ink_band(F, atlas):
+    """Where this font's own glyphs actually sit, measured from the pen.
+
+    Aligning Hangul to the bottom of the character box puts it below the
+    other glyphs, because the box reserves descender room the kana never
+    use. Matching the band the existing glyphs occupy is what makes the two
+    line up.
+    """
+    m = F['meta']
+    tops, bots = [], []
+    for c in m['large']:
+        if not (0x3040 <= c['code'] <= 0x30FF or 0x0030 <= c['code'] <= 0x005A):
+            continue
+        ox, oy, w, h = m['sizes'][c['size']]
+        if not w or not h:
+            continue
+        sub = atlas[c['tex']][c['y']:c['y'] + h, c['x']:c['x'] + w] > 0
+        ys = np.where(sub)[0]
+        if not len(ys):
+            continue
+        tops.append(oy + int(ys.min()))
+        bots.append(oy + int(ys.max()) + 1)
+    if not tops:
+        return None
+    tops.sort(); bots.sort()
+    return tops[len(tops) // 2], bots[len(bots) * 9 // 10]
+
+
+def uniform_target(F):
+    """Pick the glyph box every Hangul slot will share.
+
+    The kanji slots we borrow come in 15 different boxes and two advances, so
+    drawing into each one as-is makes the text ripple. Rewriting the char
+    table to one box and one advance is what actually makes it line up.
+    """
+    m = F['meta']
+    cnt = collections.Counter()
+    for c in m['large']:
+        if not 0x4E00 <= c['code'] <= 0x9FFF:
+            continue
+        ox, oy, w, h = m['sizes'][c['size']]
+        if ox == 0 and w >= 13 and oy + h == 18:
+            cnt[(c['size'], c['advance'])] += 1
+    (size_i, adv), _ = cnt.most_common(1)[0]
+    return size_i, adv, m['sizes'][size_i]
+
+
+def rewrite_metrics(F, codes, size_i, adv):
+    """Point every borrowed slot at the same size entry and advance."""
+    data = F['files']['FNT.bin']['data']
+    h = struct.unpack('<6H', data[0x1C:0x28])
+    off, cnt = h[2] * 4, h[3]
+    blk = data[off:]
+    raw = bytearray(imgp.l5_decompress(blk)[:cnt * 8])
+    packed = (size_i & 0x3FF) | (adv << 10)
+    n = 0
+    for i, c in enumerate(F['meta']['large']):
+        if c['code'] in codes:
+            raw[i * 8 + 2:i * 8 + 4] = struct.pack('<H', packed)
+            n += 1
+    new = l5enc.block(bytes(raw), l5enc.tree_of(blk))
+    room = len(data) - off
+    if len(new) > room:
+        raise RuntimeError('char table grew: %d > %d' % (len(new), room))
+    out = bytearray(data)
+    out[off:] = new + bytes(room - len(new))
+    return bytes(out), n
+
+
+_render = {}
+
+
+FIT = 0.94        # share of syllables that must fit before a size is accepted
+
+
+def render_box(ch, w, h):
+    """Draw one syllable at the largest size the box will take.
+
+    Sizing the type so that *every* syllable fits held the whole set back to
+    what the few heaviest ones allowed, and the result read small next to the
+    Latin and the digits. The size is chosen so nearly all of them fit, and
+    the handful that still overflow drop one step -- a difference of a pixel,
+    against a set that is otherwise a full size larger.
+    """
+    key = (ch, w, h)
+    if key in _render:
+        return _render[key]
+    size = _best_size(w, h)
+    while size > 6 and not _fits(ch, size, w, h):
+        size -= 1
+    org, off = _place(size, w, h)
+    f = ImageFont.truetype(TTF, size)
+    tmp = Image.new('L', (size * 4, size * 4), 0)
+    ImageDraw.Draw(tmp).text(org, ch, font=f, fill=255, anchor='ls')
+    box = tmp.crop((off[0], off[1], off[0] + w, off[1] + h))
+    m = (np.asarray(box, np.uint8).astype(np.uint16) * 15 // 255).astype(np.uint8)
+    _render[key] = m
+    return m
+
+
+_metrics_cache = {}
+_place_cache = {}
+_ink_cache = {}
+
+
+def _ink(ch, size):
+    """Bounding box of one syllable drawn on the baseline at `size`."""
+    k = (ch, size)
+    if k not in _ink_cache:
+        pad = size * 2
+        tmp = Image.new('L', (pad * 2, pad * 2), 0)
+        ImageDraw.Draw(tmp).text((pad, pad), ch,
+                                 font=ImageFont.truetype(TTF, size),
+                                 fill=255, anchor='ls')
+        _ink_cache[k] = tmp.getbbox()
+    return _ink_cache[k]
+
+
+def _fits(ch, size, w, h):
+    bb = _ink(ch, size)
+    return bb is None or (bb[2] - bb[0] <= w and bb[3] - bb[1] <= h)
+
+
+def _place(size, w, h):
+    """Where to crop so the set sits centred in the box at this size."""
+    k = (size, w, h)
+    if k in _place_cache:
+        return _place_cache[k]
+    sample = SYLLABLES or '가나다람뷁했음국어일이삼사오육칠팔구십'
+    union = None
+    for ch in sample:
+        bb = _ink(ch, size)
+        if bb is None:
+            continue
+        # a syllable too big for the box is drawn a step down; it must not
+        # drag the whole set off centre
+        if bb[2] - bb[0] > w or bb[3] - bb[1] > h:
+            continue
+        union = bb if union is None else (
+            min(union[0], bb[0]), min(union[1], bb[1]),
+            max(union[2], bb[2]), max(union[3], bb[3]))
+    cx = union[0] - (w - (union[2] - union[0])) // 2
+    cy = union[1] - (h - (union[3] - union[1])) // 2
+    _place_cache[k] = ((size * 2, size * 2), (cx, cy))
+    return _place_cache[k]
+
+
+def _best_size(w, h):
+    """Largest size at which nearly the whole set still fits the box."""
+    if (w, h) in _metrics_cache:
+        return _metrics_cache[(w, h)]
+    sample = SYLLABLES or '가나다람뷁했음국어일이삼사오육칠팔구십'
+    for size in range(h * 3, 5, -1):
+        ok = sum(1 for ch in sample if _fits(ch, size, w, h))
+        if ok >= FIT * len(sample):
+            _metrics_cache[(w, h)] = size
+            return size
+    raise RuntimeError('no usable size for %dx%d' % (w, h))
+
+
+def _metrics(w, h):
+    """Kept for callers that just want the nominal size."""
+    size = _best_size(w, h)
+    org, off = _place(size, w, h)
+    return size, org, off
+
+
+_cache = {}
+
+
+def mask(ch, w, h):
+    k = (ch, w, h)
+    if k not in _cache:
+        size = max(h * 2, 8)
+        f = ImageFont.truetype(TTF, size)
+        tmp = Image.new('L', (size * 2, size * 2), 0)
+        ImageDraw.Draw(tmp).text((size // 2, size // 2), ch, font=f, fill=255, anchor='mm')
+        bb = tmp.getbbox()
+        g = tmp.crop(bb).resize((w, h), Image.LANCZOS)
+        _cache[k] = (np.asarray(g, np.uint8).astype(np.uint16) * 15 // 255).astype(np.uint8)
+    return _cache[k]
+
+
+def redraw(xi, boxes):
+    """boxes: [(x, y, w, h, char)] to overwrite in this texture."""
+    w, _ = struct.unpack('<HH', xi[0x10:0x14])
+    t_off, t_sz, p_off, p_sz = struct.unpack('<IIII', xi[0x40:0x50])
+    tblk = xi[0x58 + t_off:0x58 + t_off + t_sz]
+    tiles = imgp.l5_decompress(tblk)
+    pblk = xi[0x58 + p_off:0x58 + p_off + p_sz]
+    pix = bytearray(imgp.l5_decompress(pblk))
+    idx = struct.unpack('<%dH' % (len(tiles) // 2), tiles)
+
+    sw = bytearray()
+    for i in idx:
+        sw += bytes(32) if i == 0xFFFF else pix[i * 32:i * 32 + 32]
+    wb, H = w // 2, len(sw) // (w // 2)
+    lin = bytearray(len(sw)); si = 0
+    for by in range(H // 8):
+        for bx in range(wb // 16):
+            for y in range(8):
+                d = (by * 8 + y) * wb + bx * 16
+                lin[d:d + 16] = sw[si:si + 16]; si += 16
+    a = np.frombuffer(bytes(lin), np.uint8)
+    nib = np.empty(a.size * 2, np.uint8)
+    nib[0::2] = a & 0xF; nib[1::2] = a >> 4
+    nib = nib.reshape(H, w)
+    for box in boxes:
+        x, y, gw, gh, ch = box[:5]
+        band = box[5] if len(box) > 5 else None         # (top, height) in box
+        if gw <= 0 or gh <= 0 or y + gh > H or x + gw > w:
+            continue
+        nib[y:y + gh, x:x + gw] = 0                     # wipe the old kanji
+        if ch is None:
+            continue                                    # clear-only box
+        # a band may name its own width: the telop fonts are drawn at two or
+        # three times the size of the dialogue ones and must not be squeezed
+        # into the dialogue box
+        if band and len(band) > 2:
+            top, bh, bw = band
+            bw = min(gw, bw)
+        else:
+            top, bh = band if band else (gh - UNIFORM[3], UNIFORM[3])
+            bw = min(gw, UNIFORM[2])
+        top = max(0, min(top, gh - bh))
+        nib[y + top:y + top + bh, x:x + bw] = render_box(ch, bw, bh)
+    flat = nib.reshape(-1)
+    packed = (flat[0::2] | (flat[1::2] << 4)).astype(np.uint8).tobytes()
+    sw2 = bytearray(len(packed)); si = 0
+    for by in range(H // 8):
+        for bx in range(wb // 16):
+            for y in range(8):
+                s = (by * 8 + y) * wb + bx * 16
+                sw2[si:si + 16] = packed[s:s + 16]; si += 16
+    # Writing straight back through the old tile store loses pixels: a blank
+    # chunk has no storage at all, and some chunks share one stored tile, so
+    # drawing one syllable wiped part of its neighbour. That is what broke
+    # glyphs like the Korean 'si'.
+    #
+    # Re-numbering every tile from scratch fixes it but the tile table then
+    # compresses worse than its slot allows, so keep the original table and
+    # only touch the entries that have to change. Chunks that went blank give
+    # their tile back to a free list, which covers the chunks that now need
+    # one of their own -- the store does not grow.
+    store, table, blank = {}, [], bytes(32)
+    for i in range(len(idx)):
+        chunk = bytes(sw2[i * 32:i * 32 + 32])
+        if chunk == blank:
+            table.append(0xFFFF)
+            continue
+        if chunk not in store:
+            store[chunk] = len(store)
+        table.append(store[chunk])
+    newpix = b''.join(store)
+    newtiles = struct.pack('<%dH' % len(table), *table)
+
+    # The two blocks sit back to back and the header carries both offsets, so
+    # they only have to fit the pair of slots together. That matters: the
+    # table no longer compresses as well as the original once the tiles are
+    # renumbered, while the store gains far more than that from Hangul being
+    # simpler than kanji.
+    room = t_sz + p_sz
+    tnew = _fit_block(newtiles, tblk, room)
+    pnew = _fit_block(newpix, pblk, room)
+    if tnew is None or pnew is None or len(tnew) + len(pnew) > room:
+        # The small auxiliary fonts have no room for a renumbered table.
+        # Write back through the tiles they already have instead: pixels in
+        # blank or shared chunks are lost, but those fonts only carry the
+        # guide and staff-roll text and this is how they shipped before.
+        for i, t in enumerate(idx):
+            if t != 0xFFFF:
+                pix[t * 32:t * 32 + 32] = sw2[i * 32:i * 32 + 32]
+        pnew = _fit_block(bytes(pix), pblk, p_sz)
+        if pnew is None:
+            raise RuntimeError('atlas overflow: table %s pixels %s, room %d'
+                               % (_try(newtiles, tblk), _try(newpix, pblk),
+                                  room))
+        out = bytearray(xi)
+        out[0x58 + p_off:0x58 + p_off + p_sz] = pnew + bytes(p_sz - len(pnew))
+        return bytes(out)
+    out = bytearray(xi)
+    out[0x58 + t_off:0x58 + t_off + room] = (
+        tnew + pnew + bytes(room - len(tnew) - len(pnew)))
+    struct.pack_into('<IIII', out, 0x40, t_off, len(tnew),
+                     t_off + len(tnew), room - len(tnew))
+    return bytes(out)
+
+
+def _try(raw, orig_blk):
+    n = [len(l5enc.lz10_block(raw))]
+    try:
+        n.append(len(l5enc.block(raw, l5enc.tree_of(orig_blk))))
+    except Exception:
+        pass
+    return min(n)
+
+
+def _fit_block(raw, orig_blk, room):
+    out = []
+    try:
+        out.append(l5enc.block(raw, l5enc.tree_of(orig_blk)))
+    except Exception:
+        pass
+    out.append(l5enc.lz10_block(raw))
+    out = [b for b in out if len(b) <= room]
+    return min(out, key=len) if out else None
+
+
+# ---------------------------------------------------------------- main
+def main(dry=False, nofont=False):
+    ko = load_translation()
+    ui = load_ui()
+    syll = sorted({c for t in list(ko.values()) + [v[1] for v in ui.values()]
+                   for c in t if 0xAC00 <= ord(c) <= 0xD7A3})
+    d = dnsfile.DNSFile()
+    fonts = load_fonts(d)
+    table = assign(syll, fonts, aux_priority(d, syll))
+    SYLLABLES[:] = syll
+    print('entries %d, distinct syllables %d, shared slots %d, assigned %d'
+          % (len(ko), len(syll), len(slot_pool(fonts)), len(table)))
+    print('fonts: %s' % ', '.join(fonts))
+
+    # characters that are neither Hangul nor CP932-encodable
+    bad = {}
+    for t in ko.values():
+        for ch in t:
+            if ch in table:
+                continue
+            try:
+                ch.encode(ENC)
+            except UnicodeEncodeError:
+                bad[ch] = bad.get(ch, 0) + 1
+    if bad:
+        print('NOT ENCODABLE (%d kinds): %s' % (len(bad), sorted(bad.items(), key=lambda x: -x[1])[:15]))
+
+    c = cpk.CPK(d)
+    sep = separate_copies(d, c)
+    print('per-chapter copies found in psp/cpk/separate: %d' % len(sep))
+    edits = []
+    grew = []
+    for e in sorted((x for x in c.files if x['dir'] == 'psp/txt/event/pck'),
+                    key=lambda x: x['name']):
+        chapter = e['name'][:-4]
+        raw = c.read(e)
+        n, recs = B.blobs_of(raw)
+        blobs, hit = [], 0
+        for bi, (h, off, sz) in enumerate(recs):
+            b = raw[off:off + sz]
+            g = B.split_strings(b) if len(b) >= 20 else None
+            if not g:
+                blobs.append(b); continue
+            base, total, strs = g
+            touched = False
+            for si in range(len(strs)):
+                t = ko.get('%s:%d:%d' % (chapter, bi, si))
+                if t is None:
+                    continue
+                try:
+                    t = normalize(strs[si].decode(ENC), t)
+                    strs[si] = recode(t, table)
+                except UnicodeEncodeError:
+                    continue
+                touched = True; hit += 1
+            blobs.append(B.join_strings(b, base, total, strs) if touched else b)
+        hdr = bytearray(struct.pack('<I', n)); body = bytearray()
+        start = 4 + n * 12
+        for i, (h, _, _) in enumerate(recs):
+            hdr += struct.pack('<III', h, start + len(body), len(blobs[i]))
+            body += blobs[i]
+        newpck = bytes(hdr) + bytes(body)
+        comp = crilayla.compress(newpck, effort=256)
+        nxt = min(x['offset'] for x in c.files if x['offset'] > e['offset'])
+        slot = nxt - e['offset']
+        status = 'OK ' if len(comp) <= slot else 'BIG'
+        if len(comp) > slot:
+            grew.append((e['name'], len(comp), slot))
+        print('  %-4s %s %5d lines  pck %6d->%6d  comp %6d/%6d'
+              % (chapter, status, hit, len(raw), len(newpck), len(comp), slot))
+        if len(comp) <= slot:
+            toc = cpk.read_chunk(d, c.header['TocOffset'], b'TOC ')
+            idx = [i for i, r in enumerate(toc.rows)
+                   if r['FileName'] == e['name'] and r['DirName'] == e['dir']][0]
+            row = c.header['TocOffset'] + 24 + toc.rows_off + idx * toc.row_len
+            edits += [(e['offset'], comp),
+                      (row + 8, struct.pack('>I', len(comp))),
+                      (row + 12, struct.pack('>I', len(newpck)))]
+        # the chapter bundle keeps its own uncompressed copy; blob offsets are
+        # self-relative so zero padding past the end is ignored by the reader
+        if chapter in sep:
+            off, size, _ = sep[chapter]
+            if len(newpck) <= size:
+                edits.append((off, newpck + bytes(size - len(newpck))))
+            else:
+                grew.append((chapter + ' (separate)', len(newpck), size))
+    if grew:
+        print('\n%d chapters do not fit their slot' % len(grew))
+
+    cfg_edits, cfg_done, cfg_skip = patch_cfg(c, d, ui, table)
+    edits += cfg_edits
+    print('UI text: %d strings in %d files (tips, tutorials, help, outlines)'
+          % (cfg_done, len(cfg_edits)))
+    # Before the choices: this one may slide the .scn files forward to make
+    # room, and everything after it has to write to where they ended up.
+    flo_edits, flo_done, flo_over = patch_flo(c, d, ui, table)
+    edits += flo_edits
+    print('time-travel chart: %d strings in psp/script/tt1.flo' % flo_done)
+    if flo_over:
+        print('  too long for their field: %s' % flo_over[:4])
+    scn_edits, scn_done = patch_scn(c, d, ui, table)
+    edits += scn_edits
+    print('choices: %d strings in psp/script/*.scn' % scn_done)
+    menu_edits, menu_done, menu_skip = patch_menu(c, d)
+    edits += menu_edits
+    print('menu art: %d labels redrawn' % menu_done)
+    if menu_skip:
+        print('  could not be rebuilt: %s' % menu_skip[:4])
+    movie_edits = patch_movie()
+    print('opening movie: %d subtitled .pmf' % len(movie_edits))
+    lua_edits, lua_done, lua_skip = patch_lua(c, d, table)
+    edits += lua_edits
+    print('menu and system messages: %d strings in psp/script/lua' % lua_done)
+    if lua_skip:
+        print('  too long for their slot: %s' % lua_skip[:5])
+    if cfg_skip:
+        print('  too long for their file: %s' % cfg_skip[:5])
+    if dry:
+        return
+
+    # ---- fonts ----
+    # Every dialogue font gets the same syllables drawn into its own slots.
+    font_edits = []
+    for name, F in ({} if nofont else fonts).items():
+        meta = F['meta']
+        by_code = {ch['code']: ch for ch in meta['large']}
+        codes = set(table.values())
+        got = rebuild_fnt(F, codes)
+        if got:
+            newfnt, nmetrics = got
+            fi = F['files']['FNT.bin']
+            off = F['entry']['offset'] + fi['offset']
+            (font_edits if F['where'] == 'outer' else edits).append(
+                ((CPK_LBA * SEC + off) if F['where'] == 'outer' else off, newfnt))
+            print('  %-14s FNT.bin: %d slots -> %s adv %d'
+                  % (name, nmetrics, UNIFORM, UNIFORM_ADV))
+        else:
+            print('  %-14s FNT.bin unchanged (table would not fit); glyphs are '
+                  'bottom-aligned in their own boxes instead' % name)
+        atlas = {}
+        for i in range(meta['textures']):
+            aw, ah, rgba, _ = imgp.decode(F['files']['%03d.xi' % i]['data'])
+            atlas[i] = np.frombuffer(rgba, np.uint8).reshape(ah, aw, 4)[:, :, 3]
+        band = ink_band(F, atlas)
+        print('  %-14s own glyphs occupy rows %s from the pen' % (name, band))
+        boxes = {}
+        used = {}
+        for syl, code in table.items():
+            g = by_code[code]
+            # Clear the area the original kanji occupied, not just the new
+            # box: leftover strokes keep those atlas tiles alive and the tile
+            # table then no longer fits.
+            _, ooy, ow, oh = meta['sizes'][g['size']]
+            oy = UNIFORM[1] if got else ooy
+            bw, bh = max(ow, UNIFORM[2]), max(oh, UNIFORM[3])
+            b = (max(0, band[0] - oy), UNIFORM[3]) if band else None
+            boxes.setdefault(g['tex'], []).append(
+                (g['x'], g['y'], bw, bh, syl, b))
+            used.setdefault(g['tex'], []).append(
+                (g['x'], g['y'], max(bw, UNIFORM[2]), max(bh, UNIFORM[3])))
+        # A kanji the translation does not borrow still has its ink in the
+        # way when a neighbouring slot's box grew. Those, and only those, are
+        # wiped -- the rest of the font is left as it shipped.
+        wiped = 0
+        for c in meta['large']:
+            if c['code'] in codes or not 0x4E00 <= c['code'] <= 0x9FFF:
+                continue
+            _, _, w_, h_ = meta['sizes'][c['size']]
+            if not w_ or not h_:
+                continue
+            for ux, uy, uw, uh in used.get(c['tex'], ()):
+                if (c['x'] < ux + uw and c['x'] + w_ > ux
+                        and c['y'] < uy + uh and c['y'] + h_ > uy):
+                    boxes.setdefault(c['tex'], []).append(
+                        (c['x'], c['y'], w_, h_, None, None))
+                    wiped += 1
+                    break
+        if wiped:
+            print('  %-14s %d unused kanji wiped to clear room' % (name, wiped))
+        for tex, bs in sorted(boxes.items()):
+            fi = F['files']['%03d.xi' % tex]
+            blob = redraw(fi['data'], bs)
+            assert len(blob) == fi['size']
+            off = F['entry']['offset'] + fi['offset']
+            if F['where'] == 'outer':
+                font_edits.append((CPK_LBA * SEC + off, blob))
+            else:
+                edits.append((off, blob))          # inside the PGD stream
+            print('  %-14s %03d.xi: %d glyphs' % (name, tex, len(bs)))
+
+    # ---- secondary fonts: guide window and staff roll ----
+    # They carry only ~450 kanji, so most borrowed code points are missing and
+    # the engine paints its missing-glyph box. Their kanji are dead weight now,
+    # so re-point each slot at a syllable we actually use.
+    if not nofont:
+        freq = collections.Counter()
+        for _, kotext in ui.values():
+            freq.update(ch for ch in kotext if 0xAC00 <= ord(ch) <= 0xD7A3)
+        for line in ko.values():
+            freq.update(ch for ch in line if 0xAC00 <= ord(ch) <= 0xD7A3)
+        wanted = [table[s] for s, _ in freq.most_common() if s in table]
+        render = {code: syl for syl, code in table.items()}
+        # These fonts draw the chapter cards and the menus. Those strings are
+        # short and few, so reserve every syllable they use before anything
+        # else -- that is the text the player meets first, and it was coming
+        # out as ????? because merely-frequent syllables had taken the slots.
+        def reserve(files, pick=lambda t: True):
+            out = []
+            for f in files:
+                p = os.path.join(UI_DIR, f)
+                if not os.path.exists(p):
+                    continue
+                for e in json.load(open(p, encoding='utf-8'))['entries']:
+                    t = e.get('ko', '')
+                    if not pick(t):
+                        continue
+                    for ch in t:
+                        if ch in table and table[ch] not in out:
+                            out.append(table[ch])
+            return out
+
+        # These fonts hold a few hundred glyphs against a translation that
+        # uses 1,179, so what they draw has to be reserved before the merely
+        # frequent syllables take the room. For the telop that is the chapter
+        # card -- '캐스터 편' over '후시미 히나의 경우' -- which was coming out
+        # as ?????; the rest of the executable's wording comes next.
+        chap = reserve(['eboot.json'], lambda t: t.endswith(' 편'))
+        who = reserve(['eboot.json'], lambda t: t.endswith('의 경우'))
+        # flo.json is deliberately not reserved here. Its syllables are
+        # scattered across the code range and leading with them wrecks how
+        # the char table compresses -- telop_main fell from 393 usable slots
+        # to 6. It is fed through `wanted` instead, by frequency.
+        def literals(files, pick=lambda t: True):
+            """Code points the Korean still spells out as themselves."""
+            out = set()
+            for f in files:
+                p = os.path.join(UI_DIR, f)
+                if not os.path.exists(p):
+                    continue
+                for e in json.load(open(p, encoding='utf-8'))['entries']:
+                    t = e.get('ko', '')
+                    if not pick(t):
+                        continue
+                    for ch in widen(full_stops(t)):
+                        if ch not in table and ch > ' ':
+                            out.add(ord(ch))
+            return out
+
+        KEEP = {'telop_main.xf': literals(['eboot.json', 'lua.json',
+                                           'flo.json']),
+                'staffroll.xf': literals(['staffroll.json']),
+                'telop_player.xf': literals(['eboot.json'],
+                                            lambda t: t.endswith(' 편')),
+                'telop_sp.xf': literals(['eboot.json'],
+                                        lambda t: t.endswith('의 경우'))}
+        MUST = {'telop_main.xf': chap + who
+                + reserve(['eboot.json', 'lua.json', 'flo.json']),
+                'staffroll.xf': reserve(['staffroll.json']),
+                # these two carry nothing but the chapter card's own wording
+                'telop_player.xf': chap,
+                'telop_sp.xf': who}
+        inner = cpk.CPK(d)
+        for name in ('telop_main.xf', 'staffroll.xf',
+                     'telop_player.xf', 'telop_sp.xf'):
+            e = [x for x in inner.files if x['name'] == name][0]
+            files = {f['name']: f for f in xpck.parse(inner.read(e))}
+            F = {'files': files, 'meta': fnt.parse(files['FNT.bin']['data'])}
+            atlas = {}
+            for i in range(F['meta']['textures']):
+                aw, ah, rgba, _ = imgp.decode(files['%03d.xi' % i]['data'])
+                atlas[i] = np.frombuffer(rgba, np.uint8).reshape(ah, aw, 4)[:, :, 3]
+            band = ink_band(F, atlas)
+            if name in ('telop_player.xf', 'telop_sp.xf', 'telop_main.xf'):
+                # These two hold one screen's worth of glyphs in a table with
+                # no slack; rebuilding it with only what they draw is the
+                # only way anything fits.
+                got, n = aux_fonts.remap_small(F, MUST[name], render, redraw,
+                                               band=band,
+                                               protect=KEEP.get(name, ()))
+            else:
+                got, n = aux_fonts.remap(F, wanted, render, redraw, band=band,
+                                         must=MUST.get(name, ()))
+            if not got:
+                print('  %-14s could not be re-pointed' % name)
+                continue
+            newfnt, tex = got
+            edits.append((e['offset'] + files['FNT.bin']['offset'], newfnt))
+            for t, blob in tex.items():
+                edits.append((e['offset'] + files['%03d.xi' % t]['offset'], blob))
+            print('  %-14s %d slots re-pointed at Korean' % (name, n))
+
+    eboot_edits, eboot_done, eboot_over = patch_eboot(table)
+    font_edits += eboot_edits
+    print('executable messages: %d strings in EBOOT.BIN' % eboot_done)
+    if eboot_over:
+        print('  left in Japanese: %s' % eboot_over[:5])
+
+    out = DST_NOFONT if nofont else DST
+    if not os.path.exists(out):
+        print('copying ISO ...')
+        shutil.copyfile(SRC, out)
+    f = open(out, 'r+b')
+    base_off = DNS_LBA * SEC
+    f.seek(base_off)
+    p = pgd.PGD(f.read(0x90), 2)
+    bs_ = p.block_size
+    touched = {}
+    for off, blob in edits:
+        for k in range(off // bs_, (off + len(blob) - 1) // bs_ + 1):
+            if k not in touched:
+                f.seek(base_off + p.data_offset + k * bs_)
+                touched[k] = bytearray(p.decrypt_block(k, f.read(bs_)))
+        for i, byte in enumerate(blob):
+            k, o = divmod(off + i, bs_)
+            touched[k][o] = byte
+    for k, buf in touched.items():
+        f.seek(base_off + p.data_offset + k * bs_)
+        f.write(p.decrypt_block(k, bytes(buf)))
+    for off, blob in font_edits + movie_edits:
+        f.seek(off); f.write(blob)
+    f.close()
+    print('patched %d PGD blocks + %d font ranges + %d movies -> %s'
+          % (len(touched), len(font_edits), len(movie_edits), out))
+    with open(GLYPH_MAP, 'w', encoding='utf-8') as fh:
+        json.dump(table, fh, ensure_ascii=False, indent=1)
+
+
+if __name__ == '__main__':
+    main('--dry' in sys.argv, '--nofont' in sys.argv)

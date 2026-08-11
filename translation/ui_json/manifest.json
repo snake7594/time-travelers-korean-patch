@@ -1,0 +1,55 @@
+{
+ "schema": "tt1-ui/1",
+ "game": "Time Travelers (NPJH50597)",
+ "totals": {
+  "entries": 1504,
+  "chars": 129377
+ },
+ "rules": {
+  "task": "Translate the Japanese into Korean. These are tips, tutorial and help texts, story outlines and menu prompts -- not character dialogue, so use plain informative Korean.",
+  "line_break": "\\n (backslash + n) is a hard line break. Keep the ones the source has; do not add new ones. The engine wraps at spaces on its own.",
+  "spacing": "Use natural Korean spacing. Never drop a space to save room.",
+  "ruby": "[base/reading] is furigana. Translate the base word and drop the brackets and the reading -- EXCEPT inside <TIP...>...</TIP>, where the brackets are structural and must stay as [text/key].",
+  "keep": "Leave every <...> tag as it is, and keep a leading ＊ if present.",
+  "charset": "Do not use · ₩ ≤ or zero-width spaces; the game's encoding has no room for them. Use ・ for a middle dot.",
+  "format": "Edit ko in place. Do not change id or ja, and do not add or remove entries."
+ },
+ "files": [
+  {
+   "name": "lua",
+   "source": "psp/script/lua",
+   "entries": 44,
+   "chars": 672
+  },
+  {
+   "name": "help",
+   "source": "psp/txt/help",
+   "entries": 54,
+   "chars": 6698
+  },
+  {
+   "name": "outline",
+   "source": "psp/txt/outline",
+   "entries": 46,
+   "chars": 11865
+  },
+  {
+   "name": "staffroll",
+   "source": "psp/txt/staffroll",
+   "entries": 353,
+   "chars": 3213
+  },
+  {
+   "name": "tip",
+   "source": "psp/txt/tip",
+   "entries": 870,
+   "chars": 96305
+  },
+  {
+   "name": "tutorial",
+   "source": "psp/txt/tutorial",
+   "entries": 137,
+   "chars": 10624
+  }
+ ]
+}
