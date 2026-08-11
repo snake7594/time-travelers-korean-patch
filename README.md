@@ -2,7 +2,7 @@
 
 레벨파이브 『타임 트래블러즈(TIME TRAVELERS)』 PSP판의 비공식 한국어 번역 패치입니다.
 
-배포물은 **xdelta 바이너리 패치 한 개**입니다. 게임 데이터는 일절 포함하지 않으며,
+배포물은 **xdelta 바이너리 패치**입니다 (실기용·에뮬용 두 가지). 게임 데이터는 일절 포함하지 않으며,
 적용하려면 본인이 소유한 정품 UMD에서 직접 만든 ISO가 필요합니다.
 
 ---
@@ -12,8 +12,22 @@
 | 항목 | 내용 |
 |---|---|
 | 원본 ISO | `Time Travelers.iso` — 아래 해시와 **정확히 일치**해야 합니다 |
-| 패치 파일 | `Time Travelers (KR).xdelta` (릴리스에서 내려받기) |
+| 패치 파일 | 아래 두 가지 중 하나 (릴리스에서 내려받기) |
 | 적용 도구 | [xdelta3](https://github.com/jmacd/xdelta-gpl/releases) 또는 xdeltaUI |
+
+### 어느 패치를 받아야 하나
+
+| | `hardware` | `emulator` |
+|---|---|---|
+| 실기 PSP / PS Vita(Adrenaline) | **○** | ✕ 게임이 죽습니다 |
+| PPSSPP | ○ | **○** |
+| 챕터 카드의 「○○ 편」 라벨 | 일본어 `刑事編` | **한글 「형사 편」** |
+| 실행 파일 내 메시지 52개 | 일본어 | **한글** |
+
+실행 파일(`EBOOT.BIN`)에만 들어 있는 문자열이 있는데, 이걸 한글로 바꾸려면 암호화된
+원본을 복호화된 것으로 갈아끼워야 합니다. 그러면 실기에서 메뉴 진입 전에 게임이
+죽습니다(`C1-2858-3`). 다시 암호화하려면 소니 서명 키가 필요해 불가능합니다.
+그래서 두 갈래로 나눴습니다. **실기에서 돌릴 거라면 `hardware` 를 받으세요.**
 
 ### 원본 ISO 해시 (반드시 확인)
 
@@ -41,12 +55,12 @@ md5sum "Time Travelers.iso"
 
 ### 패치 적용 후 결과물 해시
 
-```
-파일명 : Time Travelers (KR).iso
-크기   : 1,176,698,880 바이트
-MD5    : f8fe1cafc5c5cc9b6aa03f9f04598684
-SHA-1  : 90a3d16765a5b47929f9137755d408f760610ad5
-```
+두 빌드 모두 1,176,698,880 바이트입니다.
+
+| 빌드 | MD5 | SHA-1 |
+|---|---|---|
+| hardware | `fdd3704d2f83299c3a51fc38032f3502` | `01e943d2fe6007940a955f816cf7d6bea3618663` |
+| emulator | `62176c867d9c33c957ee06a720c532fd` | `d31e939719502023edf2976c86ed1989f21a0409` |
 
 이 값과 일치하면 정상적으로 적용된 것입니다.
 
@@ -59,8 +73,10 @@ SHA-1  : 90a3d16765a5b47929f9137755d408f760610ad5
 원본 ISO와 `.xdelta` 파일을 같은 폴더에 두고:
 
 ```bash
-xdelta3 -d -f -s "Time Travelers.iso" "Time Travelers (KR).xdelta" "Time Travelers (KR).iso"
+xdelta3 -d -f -s "Time Travelers.iso" "Time Travelers (KR) hardware.xdelta" "Time Travelers (KR).iso"
 ```
+
+에뮬레이터 전용 빌드를 쓰려면 파일 이름만 `emulator` 쪽으로 바꾸면 됩니다.
 
 * `-d` 디코드(적용) · `-f` 출력 파일 덮어쓰기 허용 · `-s` 원본(소스) 지정
 * 1분 이내에 끝납니다.
@@ -71,7 +87,7 @@ Windows에서 `xdelta3.exe` 대신 `xdelta.exe`로 배포된 빌드를 쓴다면
 ### 방법 B — xdeltaUI (그래픽)
 
 1. `xdeltaUI.exe` 실행 → **Apply Patch** 탭
-2. **Patch** — 내려받은 `Time Travelers (KR).xdelta`
+2. **Patch** — 내려받은 `.xdelta` (실기면 `hardware`, PPSSPP 전용이면 `emulator`)
 3. **Source File** — 원본 `Time Travelers.iso`
 4. **Output File** — 만들 파일 이름 (예: `Time Travelers (KR).iso`)
 5. **Apply** 클릭
@@ -112,8 +128,9 @@ Windows에서 `xdelta3.exe` 대신 `xdelta.exe`로 배포된 빌드를 쓴다면
   프레임 단위로 대조하면 검출된 일본어 자막 구간 119개 중 97개에 대응하는 한글이
   있고, 나머지 22개는 영문 캐스트 크레딧이거나 밝은 장면을 자막으로 잘못 잡은
   구간입니다. 구간표는 `tools/cues/` 에 있습니다.
-* 실행 파일(EBOOT) 안의 메시지 52개는 일본어로 남습니다. 실기에서 구동하려면 EBOOT를
-  원본 암호화 상태 그대로 두어야 하기 때문입니다(`docs/TECHNICAL.md` 5장).
+* `hardware` 빌드는 실행 파일 안의 메시지 52개와 챕터 카드의 「○○ 편」 라벨이 일본어로
+  남습니다. 실기 구동을 위해 EBOOT를 원본 암호화 상태로 두어야 하기 때문입니다
+  (`docs/TECHNICAL.md` 5장). `emulator` 빌드에는 한글로 들어갑니다.
 
 ---
 

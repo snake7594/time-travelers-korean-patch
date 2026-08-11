@@ -1292,6 +1292,13 @@ def main(dry=False, nofont=False):
                    for c in t if 0xAC00 <= ord(c) <= 0xD7A3})
     d = dnsfile.DNSFile()
     fonts = load_fonts(d)
+    if HARDWARE_SAFE_EBOOT:
+        # The chapter card's wording lives inside EBOOT.BIN, and a build that
+        # keeps the retail executable keeps that wording in Japanese. Drawing
+        # Korean over the glyphs it uses only garbles it, so these two fonts
+        # are left exactly as the disc has them.
+        for name in ('telop_player.xf', 'telop_sp.xf'):
+            fonts.pop(name, None)
     table = assign(syll, fonts, aux_priority(d, syll))
     SYLLABLES[:] = syll
     print('entries %d, distinct syllables %d, shared slots %d, assigned %d'
@@ -1546,8 +1553,20 @@ def main(dry=False, nofont=False):
                 'telop_player.xf': chap,
                 'telop_sp.xf': who}
         inner = cpk.CPK(d)
-        for name in ('telop_main.xf', 'staffroll.xf',
-                     'telop_player.xf', 'telop_sp.xf'):
+        aux = ['telop_main.xf', 'staffroll.xf',
+               'telop_player.xf', 'telop_sp.xf']
+        if HARDWARE_SAFE_EBOOT:
+            # telop_player and telop_sp draw nothing but the chapter card's
+            # own wording, and that wording lives inside EBOOT.BIN. A build
+            # that keeps the retail executable keeps the Japanese with it, so
+            # re-pointing their glyphs only garbles it -- 刑事編 came out as a
+            # single stray syllable because 刑, 事 and 編 had been taken over.
+            # Left alone, the card reads correctly in Japanese.
+            aux = [x for x in aux if x not in ('telop_player.xf',
+                                               'telop_sp.xf')]
+            print('  telop_player.xf / telop_sp.xf left as they are '
+                  '(their text stays in the retail EBOOT)')
+        for name in aux:
             e = [x for x in inner.files if x['name'] == name][0]
             files = {f['name']: f for f in xpck.parse(inner.read(e))}
             F = {'files': files, 'meta': fnt.parse(files['FNT.bin']['data'])}
