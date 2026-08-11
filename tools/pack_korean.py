@@ -8,7 +8,7 @@ font's glyph bitmaps at those slots are redrawn as Hangul.
 
   python pack_korean.py [--dry]
 """
-import json, os, glob, re, shutil, struct, sys, collections
+import json, os, glob, re, shutil, struct, subprocess, sys, tempfile, collections
 import numpy as np
 from PIL import Image, ImageFont, ImageDraw
 
@@ -36,7 +36,7 @@ ENC = 'cp932'
 # The dump is a decrypted ELF produced by PPSSPP.  It is useful for reading
 # and translating the strings, but it must not replace the encrypted ~PSP PRX
 # in a real-hardware ISO.  The VC2 hardware build kept its EBOOT untouched.
-HARDWARE_SAFE_EBOOT = True
+HARDWARE_SAFE_EBOOT = False
 
 
 # ---------------------------------------------------------------- assignment
@@ -233,7 +233,42 @@ def patch_eboot(table):
             continue
         d[off:off + room] = raw + b'\x00' * (room - len(raw))
         done += 1
-    return [(EBOOT_LBA * SEC, bytes(d))], done, over
+    return sign_eboot(bytes(d)), done, over
+
+
+SEBOOT = r'D:\psp\디크립트 툴\PSP-ISO-Tools\EBOOT\_seboot.exe'
+EBOOT_TAG = '5'                 # d91613f0, the tag the disc's own EBOOT carries
+EBOOT_RECORD = 51352            # /PSP_GAME/SYSDIR/EBOOT.BIN directory record
+
+
+def sign_eboot(plain):
+    """Encrypt the patched executable back into a ~PSP PRX.
+
+    A decrypted ELF runs under PPSSPP but the console refuses it before the
+    title menu (C1-2858-3). Signing it again with the tag the disc itself uses
+    means one build serves both. The result is 336 bytes longer, which still
+    lands inside the same 1943 sectors, so nothing in the image has to move --
+    only the size in the directory record.
+    """
+    work = tempfile.mkdtemp(prefix='eboot_')
+    src = os.path.join(work, 'BOOT.BIN')
+    dst = os.path.join(work, 'EBOOT.BIN')
+    open(src, 'wb').write(plain)
+    r = subprocess.run([SEBOOT, '-t' + EBOOT_TAG, 'BOOT.BIN', 'EBOOT.BIN'],
+                       cwd=work, capture_output=True, text=True)
+    if r.returncode or not os.path.exists(dst):
+        shutil.rmtree(work, ignore_errors=True)
+        raise SystemExit('EBOOT 서명 실패: %s' % (r.stdout or r.stderr)[-200:])
+    signed = open(dst, 'rb').read()
+    shutil.rmtree(work, ignore_errors=True)
+    if signed[:4] != b'~PSP':
+        raise SystemExit('서명 결과가 ~PSP 가 아닙니다')
+    if -(-len(signed) // SEC) > -(-len(plain) // SEC):
+        raise SystemExit('서명본이 원래 섹터 수를 넘습니다: %d' % len(signed))
+    print('  EBOOT re-signed: %d bytes, tag %s' % (len(signed), EBOOT_TAG))
+    size = struct.pack('<I', len(signed)) + struct.pack('>I', len(signed))
+    return [(EBOOT_LBA * SEC, signed),
+            (EBOOT_RECORD + 10, size)]      # both-endian size in the ISO record
 
 
 def patch_movie():
