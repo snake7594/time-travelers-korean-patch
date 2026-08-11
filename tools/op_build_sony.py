@@ -113,11 +113,44 @@ def decode_to_bgr(es, raw_path, expected):
     return frames, w, h
 
 
+def preview_for(name):
+    """A ready-made subtitled cut of this film, if one was prepared.
+
+    `movie/subtitles/<film>.ko.preview.mp4` is the rendered result of the full
+    subtitle pass -- 125 lines for avant_title, against the 35 that reached
+    op_subs. Re-rendering from op_subs would silently ship the shorter set, so
+    when the preview is there and lines up frame for frame with the original,
+    its pictures are used as they are.
+    """
+    path = os.path.join(P.MOVIE_DIR, 'subtitles',
+                        os.path.splitext(name)[0] + '.ko.preview.mp4')
+    return path if os.path.exists(path) else None
+
+
 def make_avi(name, original, work):
     es = op_mux.video_es(original)
     expected = len(op_mux.frames(es))
     raw = os.path.join(work, 'subtitled.bgr')
     avi = os.path.join(work, 'subtitled.avi')
+
+    ready = preview_for(name)
+    if ready:
+        probe = cv2.VideoCapture(ready)
+        count = int(probe.get(cv2.CAP_PROP_FRAME_COUNT))
+        pw = int(probe.get(cv2.CAP_PROP_FRAME_WIDTH))
+        ph = int(probe.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        probe.release()
+        if count == expected:
+            say('  using prepared subtitles: %s (%d frames, %dx%d)'
+                % (os.path.basename(ready), count, pw, ph))
+            run([FFMPEG, '-y', '-hide_banner', '-loglevel', 'error',
+                 '-i', ready, '-an', '-frames:v', str(expected),
+                 '-c:v', 'rawvideo', '-pix_fmt', 'uyvy422', '-r', RATE, avi],
+                label='UYVY AVI')
+            return avi, expected, len(es), pw, ph
+        say('  prepared subtitles skipped: %d frames, expected %d'
+            % (count, expected))
+
     say('  decode: %d frames' % expected)
     frames, w, h = decode_to_bgr(es, raw, expected)
     op_render.render(name, frames, lambda _, i, n: say(
