@@ -181,7 +181,10 @@ def patch_cfg(c, d, ui, table):
         # back a file it can reproduce byte for byte. Anything it will not
         # vouch for keeps each string in the slot it already occupies and has
         # the few that do not fit trimmed, so nothing moves.
-        cfg = None if KEEP_LAYOUT else cfgbin.parse(data)
+        # Rebuilding is a change inside the file, not to where it sits, so it
+        # is compatible with the pinned layout: what comes out still has to
+        # fit the slot below, and pin_sizes refuses anything that does not.
+        cfg = cfgbin.parse(data)
         if cfg is not None:
             rebuilt = [s for _, s in cfg.strs]
             at, cur = cfg.index(), base - cfg.base
@@ -320,12 +323,19 @@ def pinned(limit, e):
 
 
 def fit_crilayla(blob, limit):
-    """Compress `blob` into `limit`, working harder before giving up."""
-    for effort in (256, 1024, 4096):
-        comp = crilayla.compress(blob, effort=effort)
+    """Compress `blob` into `limit`, working harder before giving up.
+
+    Holding a match back costs a couple of percent on most files and pays it
+    back on a few, so the plain greedy pass stays in the running too.
+    """
+    best = None
+    for effort, lazy in ((256, True), (1024, True), (256, False), (4096, True)):
+        comp = crilayla.compress(blob, effort=effort, lazy=lazy)
         if len(comp) <= limit:
             return comp
-    return comp                       # the caller reports it as too big
+        if best is None or len(comp) < len(best):
+            best = comp
+    return best                       # the caller reports it as too big
 
 
 def pin_sizes(c, d, edits):

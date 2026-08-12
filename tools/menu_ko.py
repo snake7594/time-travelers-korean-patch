@@ -145,10 +145,25 @@ CHARSEL_OVER = [
     (388, 420, 490, 440, '후카세 유리'),
 ]
 
+# The TIPS list's category strip, down the right of the screen. The brackets
+# are part of the artwork rather than the font, so they are drawn back in with
+# the word; the reading printed above each one goes when the box is cleared.
+TIPCAT = {
+    (91, 0, 157, 25): '《전체》',
+    (91, 32, 157, 57): '《신규》',
+    (91, 64, 157, 89): '《캐릭터》',
+    (91, 96, 157, 121): '《사회》',
+    (91, 128, 157, 153): '《과학》',
+    (91, 160, 157, 185): '《유행》',
+    (91, 192, 157, 217): '《잡학》',
+    (91, 224, 157, 249): '《비화》',
+}
+
 SPRITES = {'navi.xa': {'000.xi': NAVI},
            'chara_sellect.xa': {'000.xi': CHARSEL},
            'saveloadmenu.xa': {'000.xi': SAVELOAD, '001.xi': SAVELOAD_2},
-           'text_outline_chara.xa': {'000.xi': NOTICE}}
+           'text_outline_chara.xa': {'000.xi': NOTICE},
+           'tiplistmenu.xa': {'001.xi': TIPCAT}}
 for _a in MAINMENU_ARCHIVES:
     SPRITES[_a] = {'000.xi': MAINMENU}
 OVER = {'title_new.xa': {'001.xi': (TITLE, 40)},

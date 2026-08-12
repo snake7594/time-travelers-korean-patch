@@ -62,7 +62,14 @@ def _put_len(b, length):
         v -= 255
 
 
-def compress(data, effort=64):
+def compress(data, effort=64, lazy=True):
+    """`data` as a CRILAYLA blob.
+
+    `lazy` holds a match back for one byte when the next position offers a
+    longer one, spending nine bits on a literal to buy more coverage. It is
+    the usual deflate trick and worth a couple of percent here, which is what
+    several files needed to stay inside the size the archive pins them to.
+    """
     L = len(data)
     if L <= RAW:
         raise ValueError('input must be larger than 0x100 bytes')
@@ -70,43 +77,66 @@ def compress(data, effort=64):
     rev = data[::-1]
     b = _Bits()
     table = {}
+
+    def find(r):
+        """Longest match reaching back from `r`, as (length, distance)."""
+        if r + MIN_LEN > n:
+            return 0, 0
+        lst = table.get(rev[r:r + MIN_LEN])
+        if not lst:
+            return 0, 0
+        best_len = best_dist = 0
+        maxl = n - r
+        tried = 0
+        for cand in reversed(lst):
+            d = r - cand
+            if d < MIN_DIST:
+                continue
+            if d > MAX_DIST:
+                break
+            tried += 1
+            if tried > effort:
+                break
+            l = 0
+            while l < maxl and rev[cand + l] == rev[r + l]:
+                l += 1
+            if l > best_len:
+                best_len, best_dist = l, d
+                if l == maxl:
+                    break
+        return best_len, best_dist
+
+    def add(i):
+        if i + MIN_LEN <= n:
+            table.setdefault(rev[i:i + MIN_LEN], []).append(i)
+
+    def literal(i):
+        b.put(0, 1)
+        b.put(rev[i], 8)
+
     r = 0
+    cur = find(0)
     while r < n:
-        best_len = 0
-        best_dist = 0
-        if r + MIN_LEN <= n:
-            key = rev[r:r + MIN_LEN]
-            lst = table.get(key)
-            if lst:
-                tried = 0
-                for cand in reversed(lst):
-                    d = r - cand
-                    if d < MIN_DIST:
-                        continue
-                    if d > MAX_DIST:
-                        break
-                    tried += 1
-                    if tried > effort:
-                        break
-                    maxl = n - r
-                    l = 0
-                    while l < maxl and rev[cand + l] == rev[r + l]:
-                        l += 1
-                    if l > best_len:
-                        best_len, best_dist = l, d
-        if best_len >= MIN_LEN:
+        best_len, best_dist = cur
+        if best_len < MIN_LEN:
+            literal(r)
+            add(r)
+            r += 1
+        else:
+            add(r)
+            nxt = find(r + 1) if lazy and r + 1 < n else (0, 0)
+            if nxt[0] > best_len:
+                literal(r)
+                r += 1
+                cur = nxt
+                continue
+            for i in range(r + 1, r + best_len):
+                add(i)
             b.put(1, 1)
             b.put(best_dist - MIN_DIST, 13)
             _put_len(b, best_len)
-            step = best_len
-        else:
-            b.put(0, 1)
-            b.put(rev[r], 8)
-            step = 1
-        for i in range(r, r + step):
-            if i + MIN_LEN <= n:
-                table.setdefault(rev[i:i + MIN_LEN], []).append(i)
-        r += step
+            r += best_len
+        cur = find(r) if r < n else (0, 0)
 
     comp = b.finish()
     return b'CRILAYLA' + struct.pack('<II', n, len(comp)) + comp + data[:RAW]

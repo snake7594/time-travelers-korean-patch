@@ -47,9 +47,24 @@ def ramp(pal, ind, box):
     return sorted(best)
 
 
+def clip(ind, box):
+    """`box` cut down to the part that is actually on the texture.
+
+    A quad's uv rectangle can reach past the edge of the sheet -- several of
+    the operation-guide labels do -- and writing the drawn text at its full
+    height then runs off the array.
+    """
+    h, w = ind.shape
+    x0, y0, x1, y1 = box
+    return max(x0, 0), max(y0, 0), min(x1, w), min(y1, h)
+
+
 def draw(ind, pal, box, text, pad=1):
     """Clear the rectangle and centre `text` in it."""
+    box = clip(ind, box)
     x0, y0, x1, y1 = box
+    if x1 - x0 < 6 or y1 - y0 < 6:
+        return False
     ramp_ = ramp(pal, ind, box)
     if not ramp_ or not text:
         return False
@@ -99,7 +114,9 @@ def draw_over(ind, pal, box, text, bg_col, pad=2):
     bottom, so one clean column carries every row -- and the Korean is then
     composited over it and matched back to the palette.
     """
-    x0, y0, x1, y1 = box
+    x0, y0, x1, y1 = clip(ind, box)
+    if x1 - x0 < 6 or y1 - y0 < 6:
+        return False
     p = np.array(pal, np.int16)
     area = ind[y0:y1, x0:x1]
     lum = p[:, :3].sum(1)
