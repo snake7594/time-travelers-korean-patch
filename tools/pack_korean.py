@@ -75,7 +75,19 @@ DNS_STAGES = frozenset(['pck', 'cfg', 'flo', 'scn', 'menu', 'lua'])
 # one encoder whose output was never shown to match what the game shipped --
 # every method-4 block in the game re-encodes byte for byte, method 2 only
 # round-trips through our own decoder.
-MENU_SKIP = frozenset()
+MENU_SKIP = frozenset(())
+# Diagnostic: when either of these is non-empty, patch only what it names.
+# Narrowing to one file at a time is the only way left to get a reproducer:
+# the sheets are stored plain, so patching one changes its bytes in place and
+# nothing else in the archive at all -- no TOC row, no offsets, no sizes.
+MENU_ONLY = frozenset(())
+LUA_ONLY = frozenset(())
+# Diagnostic: leave every font exactly as it shipped. The rebuilt glyph atlas
+# goes into the encrypted stream alongside the text edits and is not covered
+# by DNS_STAGES, so it has been in every build tested so far -- including all
+# of the ones meant to isolate something else. The one build the console ever
+# accepted, the one that left the stream alone, dropped the fonts with it.
+SKIP_FONTS = False
 # Re-encrypt the whole install stream with pgdecrypt.exe rather than rewriting
 # its blocks in place. The tool writes a fresh header and key alongside the
 # data; patching blocks under the original header is what the console refused.
@@ -456,6 +468,8 @@ def patch_menu(c, d):
             for k, v in sheets.items():
                 jobs.setdefault(name, {}).setdefault(k, []).append((tag, v))
     for name, sheets in jobs.items():
+        if MENU_ONLY and name not in MENU_ONLY:
+            continue
         e = [x for x in c.files if x['name'] == name][0]
         blob = bytearray(c.read(e))
         parts = {p['name']: p for p in xpck.parse(bytes(blob))}
@@ -646,6 +660,8 @@ def patch_lua(c, d, table):
     toc_base = c.header['TocOffset'] + 24 + toc.rows_off
     for e in sorted((x for x in c.files if x['name'].endswith('.lua')),
                     key=lambda x: (x['dir'], x['name'])):
+        if LUA_ONLY and e['name'] not in LUA_ONLY:
+            continue
         src = c.read(e)
         out = bytearray(src)
         hit = 0
@@ -1611,7 +1627,9 @@ def main(dry=False, nofont=False):
     # ---- fonts ----
     # Every dialogue font gets the same syllables drawn into its own slots.
     font_edits = []
-    for name, F in ({} if nofont else fonts).items():
+    if SKIP_FONTS:
+        print('  fonts left exactly as they shipped (diagnostic)')
+    for name, F in ({} if nofont or SKIP_FONTS else fonts).items():
         meta = F['meta']
         by_code = {ch['code']: ch for ch in meta['large']}
         codes = set(table.values())
@@ -1682,7 +1700,7 @@ def main(dry=False, nofont=False):
     # They carry only ~450 kanji, so most borrowed code points are missing and
     # the engine paints its missing-glyph box. Their kanji are dead weight now,
     # so re-point each slot at a syllable we actually use.
-    if not nofont:
+    if not (nofont or SKIP_FONTS):
         freq = collections.Counter()
         for _, kotext in ui.values():
             freq.update(ch for ch in kotext if 0xAC00 <= ord(ch) <= 0xD7A3)
