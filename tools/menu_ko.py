@@ -159,6 +159,23 @@ TIPCAT = {
     (91, 224, 157, 249): '《비화》',
 }
 
+# The beginner's-guide popup that opens over the dialogue window. Neither of
+# these is a string: the lua files mention both words, but only inside
+# comments -- every literal the game draws is a string.char run, and decoding
+# all of them turns up neither. They are painted into this sheet.
+# The heading is yellow on the blue tab and the button is white on its plate,
+# so both boxes stop short of the plate edges that frame them.
+TUTORIAL = {
+    (30, 52, 80, 70): '가이드',
+}
+# The Cancel button's plate is a vertical gradient, so clearing it to one
+# colour left a visible seam where the word had been; it is drawn over the
+# artwork instead. The right edge stops at 452, short of the plate's own
+# inner highlight.
+TUTORIAL_OVER = [
+    (399, 21, 452, 36, '취소'),
+]
+
 # The three full-screen operation guides. Unlike the other sheets these could
 # not be keyed off the .pvb quads: a quad here bundles a button badge and up to
 # four lines of text, so clearing one would take the ○△□ badges with it. The
@@ -252,8 +269,10 @@ SPRITES = {'navi.xa': {'000.xi': NAVI},
            'tiplistmenu.xa': {'001.xi': TIPCAT},
            'control_a.xa': {'000.xi': CONTROL_A},
            'control_b.xa': {'000.xi': CONTROL_B},
-           'control_c.xa': {'000.xi': CONTROL_C}}
+           'control_c.xa': {'000.xi': CONTROL_C},
+           'tutorial.xa': {'000.xi': TUTORIAL}}
 for _a in MAINMENU_ARCHIVES:
     SPRITES[_a] = {'000.xi': MAINMENU}
 OVER = {'title_new.xa': {'001.xi': (TITLE, 40)},
-        'chara_sellect.xa': {'000.xi': (CHARSEL_OVER, 0)}}
+        'chara_sellect.xa': {'000.xi': (CHARSEL_OVER, 0)},
+        'tutorial.xa': {'000.xi': (TUTORIAL_OVER, 0)}}
