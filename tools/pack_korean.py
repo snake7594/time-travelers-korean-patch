@@ -214,7 +214,8 @@ def patch_cfg(c, d, ui, table):
         else:
             # Offsets inside a .cfg.bin are file-relative, so it may grow; pay
             # for it with compression and tell the TOC both new sizes.
-            comp = crilayla.compress(blob, effort=256)
+            slot = pinned(slot, e)
+            comp = fit_crilayla(blob, slot)
             if len(comp) > slot:
                 skipped.append((e['name'], len(comp), slot))
                 continue
@@ -304,6 +305,29 @@ def rewrite_pgd(edits):
     return pgdtool.rewrite(edits, SRC, DNS_LBA, DNS_SIZE, SEC)
 
 
+def pinned(limit, e):
+    """`limit` narrowed to the stored size when the layout is pinned.
+
+    KEEP_SIZE holds every file's FileSize at what it shipped with, so the
+    reader only ever reads that many bytes. A blob that fits the gap to the
+    next file but overruns the pinned size gets its tail cut -- and CRILAYLA
+    keeps the original's first 0x100 bytes at the very end of the blob, so
+    the cut lands there and the file comes out short and shifted from byte
+    255 on. That is how menu_mainmenu.lua came to be corrupt on the console
+    while the emulator, reading one byte past the buffer, limped through it.
+    """
+    return min(limit, e['size']) if KEEP_SIZE else limit
+
+
+def fit_crilayla(blob, limit):
+    """Compress `blob` into `limit`, working harder before giving up."""
+    for effort in (256, 1024, 4096):
+        comp = crilayla.compress(blob, effort=effort)
+        if len(comp) <= limit:
+            return comp
+    return comp                       # the caller reports it as too big
+
+
 def pin_sizes(c, d, edits):
     """Drop every TOC size update, padding its file back to the room it had.
 
@@ -315,7 +339,7 @@ def pin_sizes(c, d, edits):
     """
     toc = cpk.read_chunk(d, c.header['TocOffset'], b'TOC ')
     base = c.header['TocOffset'] + 24 + toc.rows_off
-    room, where = {}, {}
+    room, where, rows = {}, {}, {}
     for i, r in enumerate(toc.rows):
         row = base + i * toc.row_len
         key = (r['DirName'], r['FileName'])
@@ -326,8 +350,22 @@ def pin_sizes(c, d, edits):
             # and decompresses into, so it has to keep telling the truth. Only
             # the stored length is pinned, and the data padded back out to it.
             where[e['offset']] = e['size']
+            rows[e['offset']] = (row + 8, row + 12)
+
+    # A blob that outgrew its pinned size cannot go in at all: its TOC entry
+    # will keep saying the old, smaller number, so the reader would take the
+    # front of it and drop the tail. Refuse the whole file -- its data and
+    # both of its TOC words -- rather than write something that reads short.
+    veto = set()
+    for off, blob in edits:
+        if off in where and len(blob) > where[off]:
+            veto.add(off)
+    dead = {w for off in veto for w in rows[off]} | veto
+
     out, dropped = [], 0
     for off, blob in edits:
+        if off in dead:
+            continue
         if off in room and len(blob) == 4:
             dropped += 1
             continue
@@ -335,6 +373,10 @@ def pin_sizes(c, d, edits):
             blob = blob + bytes(where[off] - len(blob))
         out.append((off, blob))
     print('  layout pinned: %d TOC size updates dropped' % dropped)
+    if veto:
+        names = [x['name'] for x in c.files if x['offset'] in veto]
+        print('  %d files outgrew their pinned size and were left in Japanese:'
+              ' %s' % (len(veto), ', '.join(sorted(names)[:6])))
     return out
 
 
@@ -415,8 +457,9 @@ def patch_menu(c, d):
         if e['size'] == e['extract']:
             edits.append((e['offset'], out))
         else:
-            comp = crilayla.compress(out, effort=256)
-            if len(comp) > nxt - e['offset']:
+            slot = pinned(nxt - e['offset'], e)
+            comp = fit_crilayla(out, slot)
+            if len(comp) > slot:
                 skipped.append((name, 'too big'))
                 continue
             edits += [(e['offset'], comp),
@@ -474,18 +517,19 @@ def patch_flo(c, d, ui, table):
     if not done:
         return [], 0, over
     blob = bytes(data)
-    comp = crilayla.compress(blob, effort=256)
     toc = cpk.read_chunk(d, c.header['TocOffset'], b'TOC ')
     row_of = {(r['DirName'], r['FileName']): i for i, r in enumerate(toc.rows)}
     row = (c.header['TocOffset'] + 24 + toc.rows_off
            + row_of[(e['dir'], e['name'])] * toc.row_len)
     nxt = min(x['offset'] for x in c.files if x['offset'] > e['offset'])
-    if len(comp) <= nxt - e['offset']:
+    slot = pinned(nxt - e['offset'], e)
+    comp = fit_crilayla(blob, slot)
+    if len(comp) <= slot:
         return [(e['offset'], comp),
                 (row + 8, struct.pack('>I', len(comp)))], done, over
     if KEEP_LAYOUT:
         print('  tt1.flo would need %d bytes for a %d-byte slot; left alone'
-              % (len(comp), nxt - e['offset']))
+              % (len(comp), slot))
         return [], 0, over
     # Korean does not compress the way the Japanese did -- the kana it
     # replaces are a handful of repeated byte values, the kanji the Hangul
@@ -591,7 +635,8 @@ def patch_lua(c, d, table):
             edits.append((row + 8, struct.pack('>I', len(blob))))
             edits.append((row + 12, struct.pack('>I', len(blob))))
         else:
-            comp = crilayla.compress(blob, effort=256)
+            slot = pinned(slot, e)
+            comp = fit_crilayla(blob, slot)
             if len(comp) > slot:
                 skipped.append((e['name'], len(comp), slot))
                 continue
@@ -680,9 +725,10 @@ def patch_scn(c, d, ui, table):
         short += cut
         if not hit:
             continue
-        comp = crilayla.compress(blob, effort=256)
         nxt = min(x['offset'] for x in c.files if x['offset'] > e['offset'])
-        if len(comp) > nxt - e['offset']:
+        slot = pinned(nxt - e['offset'], e)
+        comp = fit_crilayla(blob, slot)
+        if len(comp) > slot:
             continue
         row = toc_base + row_of[(e['dir'], e['name'])] * toc.row_len
         edits.append((e['offset'], comp))
@@ -1459,9 +1505,9 @@ def main(dry=False, nofont=False):
             hdr += struct.pack('<III', h, start + len(body), len(blobs[i]))
             body += blobs[i]
         newpck = bytes(hdr) + bytes(body)
-        comp = crilayla.compress(newpck, effort=256)
         nxt = min(x['offset'] for x in c.files if x['offset'] > e['offset'])
-        slot = nxt - e['offset']
+        slot = pinned(nxt - e['offset'], e)
+        comp = fit_crilayla(newpck, slot)
         status = 'OK ' if len(comp) <= slot else 'BIG'
         if len(comp) > slot:
             grew.append((e['name'], len(comp), slot))
