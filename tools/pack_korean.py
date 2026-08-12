@@ -13,7 +13,7 @@ import numpy as np
 from PIL import Image, ImageFont, ImageDraw
 
 import cpk, dnsfile, crilayla, pgd, fnt, xpck, imgp, l5enc, aux_fonts
-import extract_lua, extract_flo, imgp8, menu_tex, menu_ko, cfgbin
+import extract_lua, extract_flo, imgp8, menu_tex, menu_ko, cfgbin, pgdtool
 import build_expand2 as B
 
 SRC = r'D:\psp\타임트레블러즈\Time Travelers.iso'
@@ -30,6 +30,7 @@ TTF = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                    'NanumSquareNeo-cBd.ttf')
 SYLLABLES = []   # filled in by main(); the size is measured against these
 DNS_LBA, CPK_LBA, EBOOT_LBA, SEC = 285712, 55248, 544, 2048
+DNS_SIZE = 591537680
 EBOOT_DUMP = (r'D:\psp\ppsspp_win\memstick\PSP\SYSTEM\DUMP'
               '\\NPJH50597_smp_rom.BIN')
 ENC = 'cp932'
@@ -37,6 +38,34 @@ ENC = 'cp932'
 # and translating the strings, but it must not replace the encrypted ~PSP PRX
 # in a real-hardware ISO.  The VC2 hardware build kept its EBOOT untouched.
 HARDWARE_SAFE_EBOOT = False
+# Nothing inside the CPK may move. A sister project (원격수사) traced the very
+# same console error, C1-2858-3, to an archive that had been relocated, and
+# fixed it by replacing every file where it already lay. This build holds that
+# line: a file that would outgrow its slot is left in Japanese rather than
+# repacked somewhere else.
+KEEP_LAYOUT = True
+# Diagnostic: leave the PGD-encrypted install stream completely alone. The
+# emulator decrypts PGD in software, the console does it in the KIRK engine,
+# so a re-encryption that satisfies one need not satisfy the other -- and the
+# game reads this stream on its way to the title screen.
+SKIP_DNS = False
+# Diagnostic: cycle the same blocks through decrypt and re-encrypt but leave
+# their contents alone. If the console still refuses the disc, the round trip
+# itself is not faithful; if it boots, the crypto is fine and it is what the
+# edits do to the data that upsets it.
+PGD_IDENTITY = False
+# Nothing in the archive may change size either. CRILAYLA stops at the length
+# the header declares, so a shorter re-compression can simply be padded back
+# out to the room it had -- and then the TOC row never needs touching.
+KEEP_SIZE = True
+# Diagnostic: keep only the first N edits to the encrypted stream. If even one
+# changed string is enough to stop the console, something is checking the
+# stream's contents rather than its layout.
+DNS_LIMIT = 0
+# Re-encrypt the whole install stream with pgdecrypt.exe rather than rewriting
+# its blocks in place. The tool writes a fresh header and key alongside the
+# data; patching blocks under the original header is what the console refused.
+PGD_TOOL = True
 
 
 # ---------------------------------------------------------------- assignment
@@ -152,7 +181,7 @@ def patch_cfg(c, d, ui, table):
         # back a file it can reproduce byte for byte. Anything it will not
         # vouch for keeps each string in the slot it already occupies and has
         # the few that do not fit trimmed, so nothing moves.
-        cfg = cfgbin.parse(data)
+        cfg = None if KEEP_LAYOUT else cfgbin.parse(data)
         if cfg is not None:
             rebuilt = [s for _, s in cfg.strs]
             at, cur = cfg.index(), base - cfg.base
@@ -269,6 +298,44 @@ def sign_eboot(plain):
     size = struct.pack('<I', len(signed)) + struct.pack('>I', len(signed))
     return [(EBOOT_LBA * SEC, signed),
             (EBOOT_RECORD + 10, size)]      # both-endian size in the ISO record
+
+
+def rewrite_pgd(edits):
+    return pgdtool.rewrite(edits, SRC, DNS_LBA, DNS_SIZE, SEC)
+
+
+def pin_sizes(c, d, edits):
+    """Drop every TOC size update, padding its file back to the room it had.
+
+    A file that re-compresses smaller still has to occupy what it occupied:
+    a sister project traced this console's C1-2858-3 to an archive whose
+    layout had shifted, and size is part of that layout. The decompressor
+    reads the length from the block header, so the slack at the end is never
+    looked at.
+    """
+    toc = cpk.read_chunk(d, c.header['TocOffset'], b'TOC ')
+    base = c.header['TocOffset'] + 24 + toc.rows_off
+    room, where = {}, {}
+    for i, r in enumerate(toc.rows):
+        row = base + i * toc.row_len
+        key = (r['DirName'], r['FileName'])
+        e = next((x for x in c.files if (x['dir'], x['name']) == key), None)
+        if e:
+            room[row + 8] = e['size']
+            # ExtractSize is left alone: it is the length the reader allocates
+            # and decompresses into, so it has to keep telling the truth. Only
+            # the stored length is pinned, and the data padded back out to it.
+            where[e['offset']] = e['size']
+    out, dropped = [], 0
+    for off, blob in edits:
+        if off in room and len(blob) == 4:
+            dropped += 1
+            continue
+        if off in where and len(blob) < where[off]:
+            blob = blob + bytes(where[off] - len(blob))
+        out.append((off, blob))
+    print('  layout pinned: %d TOC size updates dropped' % dropped)
+    return out
 
 
 def patch_movie():
@@ -416,6 +483,10 @@ def patch_flo(c, d, ui, table):
     if len(comp) <= nxt - e['offset']:
         return [(e['offset'], comp),
                 (row + 8, struct.pack('>I', len(comp)))], done, over
+    if KEEP_LAYOUT:
+        print('  tt1.flo would need %d bytes for a %d-byte slot; left alone'
+              % (len(comp), nxt - e['offset']))
+        return [], 0, over
     # Korean does not compress the way the Japanese did -- the kana it
     # replaces are a handful of repeated byte values, the kanji the Hangul
     # rides on are scattered -- so the file no longer fits where it sat.
@@ -1443,6 +1514,13 @@ def main(dry=False, nofont=False):
         print('  too long for their slot: %s' % lua_skip[:5])
     if cfg_skip:
         print('  too long for their file: %s' % cfg_skip[:5])
+    if KEEP_SIZE:
+        edits = pin_sizes(c, d, edits)
+    if DNS_LIMIT:
+        edits = edits[:DNS_LIMIT]      # original order, for bisection
+        print('  DNS edits limited to %d, %d bytes at %s (diagnostic)'
+              % (len(edits), sum(len(b) for _, b in edits),
+                 ', '.join(str(o) for o, _ in edits)))
     if dry:
         return
 
@@ -1645,20 +1723,35 @@ def main(dry=False, nofont=False):
     p = pgd.PGD(f.read(0x90), 2)
     bs_ = p.block_size
     touched = {}
-    for off, blob in edits:
-        for k in range(off // bs_, (off + len(blob) - 1) // bs_ + 1):
-            if k not in touched:
-                f.seek(base_off + p.data_offset + k * bs_)
-                touched[k] = bytearray(p.decrypt_block(k, f.read(bs_)))
-        for i, byte in enumerate(blob):
-            k, o = divmod(off + i, bs_)
-            touched[k][o] = byte
-    for k, buf in touched.items():
-        f.seek(base_off + p.data_offset + k * bs_)
-        f.write(p.decrypt_block(k, bytes(buf)))
+    if SKIP_DNS:
+        print('DNS left untouched (diagnostic build): %d edits dropped'
+              % len(edits))
+        edits = []
+    if PGD_TOOL and edits:
+        blob = rewrite_pgd(edits)
+        f.seek(base_off)
+        f.write(blob)
+        touched = range(len(edits))          # only for the closing tally
+    else:
+        for off, blob in edits:
+            for k in range(off // bs_, (off + len(blob) - 1) // bs_ + 1):
+                if k not in touched:
+                    f.seek(base_off + p.data_offset + k * bs_)
+                    touched[k] = bytearray(p.decrypt_block(k, f.read(bs_)))
+            if PGD_IDENTITY:
+                continue
+            for i, byte in enumerate(blob):
+                k, o = divmod(off + i, bs_)
+                touched[k][o] = byte
+        for k, buf in touched.items():
+            f.seek(base_off + p.data_offset + k * bs_)
+            f.write(p.decrypt_block(k, bytes(buf)))
     for off, blob in font_edits + movie_edits:
         f.seek(off); f.write(blob)
     f.close()
+    if PGD_IDENTITY:
+        print('PGD identity round trip: %d blocks re-encrypted unchanged'
+              % len(touched))
     print('patched %d PGD blocks + %d font ranges + %d movies -> %s'
           % (len(touched), len(font_edits), len(movie_edits), out))
     with open(GLYPH_MAP, 'w', encoding='utf-8') as fh:
