@@ -13,7 +13,7 @@ import struct
 import numpy as np
 from PIL import Image, ImageFont, ImageDraw
 
-import imgp8, l5enc
+import imgp8, l5enc, l5enc2
 
 TTF = r'D:\gc\rom\SRW_GC\NanumSquareNeo-cBd.ttf'
 _font = {}
@@ -172,10 +172,23 @@ def encode(xi, ind):
     tiles = struct.pack('<%dH' % len(table), *table)
     pix = b''.join(store)
     room = t_sz + p_sz
-    a = _fit(tiles, xi[0x58 + t_off:0x58 + t_off + t_sz], room)
-    b = _fit(pix, xi[0x58 + p_off:0x58 + p_off + p_sz], room)
+    was_t = xi[0x58 + t_off:0x58 + t_off + t_sz]
+    was_p = xi[0x58 + p_off:0x58 + p_off + p_sz]
+
+    # Keep a block exactly as it shipped when its contents did not change,
+    # and otherwise re-emit it in the method it arrived in -- writing
+    # title_new.xa's tile table back as LZ10 instead of the RLE it shipped
+    # with gave a disc the console refuses, dying just before the title
+    # screen while PPSSPP showed it.
+    a = was_t if imgp8.l5_decompress(was_t) == tiles else _fit(tiles, was_t, room)
+    b = was_p if imgp8.l5_decompress(was_p) == pix else _fit(pix, was_p, room)
     if a is None or b is None or len(a) + len(b) > room:
         return None
+    for blk, orig in ((a, was_t), (b, was_p)):
+        if blk is not orig and (blk[0] & 7) != (orig[0] & 7):
+            print('    compression %d -> %d; the console may refuse it'
+                  % (orig[0] & 7, blk[0] & 7))
+            return None
     out = bytearray(xi)
     out[0x58 + t_off:0x58 + t_off + room] = a + b + bytes(room - len(a) - len(b))
     struct.pack_into('<IIII', out, 0x40, t_off, len(a), t_off + len(a),
@@ -184,14 +197,30 @@ def encode(xi, ind):
 
 
 def _fit(raw, orig, room):
-    out = [struct.pack('<I', len(raw) << 3) + raw]
-    try:
-        out.append(l5enc.block(raw, l5enc.tree_of(orig)))
-    except Exception:
-        pass
-    # The save screen's art needs the longer match search: at the default
-    # effort it came out 72 bytes over its slot, and these blocks are 70 kB,
-    # so the extra work is worth it.
-    out.append(l5enc.lz10_block(raw, effort=256))
-    out = [x for x in out if len(x) <= room]
-    return min(out, key=len) if out else None
+    """The smallest block holding `raw` that fits, keeping `orig`'s method.
+
+    Only if nothing in that method fits does this hand back a block in
+    another one; the caller checks and skips the texture rather than ship
+    something the console might refuse.
+    """
+    out = []
+    for enc in (lambda: struct.pack('<I', len(raw) << 3) + raw,
+                # The save screen's art needs the longer match search: at the
+                # default effort it came out 72 bytes over its slot, and these
+                # blocks are 70 kB, so the extra work is worth it.
+                lambda: l5enc.lz10_block(raw, effort=256),
+                lambda: l5enc2.huff4_block(raw, l5enc.tree_of(orig)),
+                lambda: l5enc2.huff4_block(raw),
+                lambda: l5enc.block(raw, l5enc.tree_of(orig)),
+                lambda: l5enc2.huff8_block(raw),
+                lambda: l5enc2.rle_block(raw)):
+        try:
+            blk = enc()
+        except Exception:
+            continue                 # a tree without every symbol the new data uses
+        if len(blk) <= room:
+            out.append(blk)
+    if not out:
+        return None
+    same = [x for x in out if (x[0] & 7) == (orig[0] & 7)]
+    return min(same or out, key=len)
