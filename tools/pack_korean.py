@@ -62,6 +62,20 @@ KEEP_SIZE = True
 # changed string is enough to stop the console, something is checking the
 # stream's contents rather than its layout.
 DNS_LIMIT = 0
+# Diagnostic: which kinds of edit to the encrypted stream this build carries.
+# A prefix of the edit list, which is what DNS_LIMIT cuts, does not correspond
+# to anything you can name afterwards; these do, so a failure points at work
+# rather than at an index.
+#   pck  chapter dialogue         cfg  tips, tutorials, help, outlines
+#   flo  time-travel chart        scn  choices
+#   menu menu artwork             lua  menu and system messages
+DNS_STAGES = frozenset(['pck', 'cfg', 'flo', 'scn', 'menu', 'lua'])
+# Diagnostic: leave these sheets in Japanese. The two named here are the only
+# ones whose rewritten block comes out of the method-2 encoder, which is the
+# one encoder whose output was never shown to match what the game shipped --
+# every method-4 block in the game re-encodes byte for byte, method 2 only
+# round-trips through our own decoder.
+MENU_SKIP = frozenset()
 # Re-encrypt the whole install stream with pgdecrypt.exe rather than rewriting
 # its blocks in place. The tool writes a fresh header and key alongside the
 # data; patching blocks under the original header is what the console refused.
@@ -308,6 +322,14 @@ def rewrite_pgd(edits):
     return pgdtool.rewrite(edits, SRC, DNS_LBA, DNS_SIZE, SEC)
 
 
+def stage(name, got):
+    """`got`, unless this build is leaving that kind of edit out."""
+    if name in DNS_STAGES:
+        return got
+    print('  [%s] %d edits dropped (diagnostic)' % (name, len(got)))
+    return []
+
+
 def pinned(limit, e):
     """`limit` narrowed to the stored size when the layout is pinned.
 
@@ -439,6 +461,10 @@ def patch_menu(c, d):
         parts = {p['name']: p for p in xpck.parse(bytes(blob))}
         hit = 0
         for xi_name, todo in sheets.items():
+            if (name, xi_name) in MENU_SKIP:
+                print('  [%s %s] left in Japanese (diagnostic)'
+                      % (name, xi_name))
+                continue
             xi = parts[xi_name]['data']
             ind, _ = imgp8.indices(xi)
             pal = imgp8.palette(xi)
@@ -1484,6 +1510,7 @@ def main(dry=False, nofont=False):
     sep = separate_copies(d, c)
     print('per-chapter copies found in psp/cpk/separate: %d' % len(sep))
     edits = []
+    pck_edits = []
     grew = []
     for e in sorted((x for x in c.files if x['dir'] == 'psp/txt/event/pck'),
                     key=lambda x: x['name']):
@@ -1528,43 +1555,44 @@ def main(dry=False, nofont=False):
             idx = [i for i, r in enumerate(toc.rows)
                    if r['FileName'] == e['name'] and r['DirName'] == e['dir']][0]
             row = c.header['TocOffset'] + 24 + toc.rows_off + idx * toc.row_len
-            edits += [(e['offset'], comp),
-                      (row + 8, struct.pack('>I', len(comp))),
-                      (row + 12, struct.pack('>I', len(newpck)))]
+            pck_edits += [(e['offset'], comp),
+                          (row + 8, struct.pack('>I', len(comp))),
+                          (row + 12, struct.pack('>I', len(newpck)))]
         # the chapter bundle keeps its own uncompressed copy; blob offsets are
         # self-relative so zero padding past the end is ignored by the reader
         if chapter in sep:
             off, size, _ = sep[chapter]
             if len(newpck) <= size:
-                edits.append((off, newpck + bytes(size - len(newpck))))
+                pck_edits.append((off, newpck + bytes(size - len(newpck))))
             else:
                 grew.append((chapter + ' (separate)', len(newpck), size))
     if grew:
         print('\n%d chapters do not fit their slot' % len(grew))
+    edits += stage('pck', pck_edits)
 
     cfg_edits, cfg_done, cfg_skip = patch_cfg(c, d, ui, table)
-    edits += cfg_edits
+    edits += stage('cfg', cfg_edits)
     print('UI text: %d strings in %d files (tips, tutorials, help, outlines)'
           % (cfg_done, len(cfg_edits)))
     # Before the choices: this one may slide the .scn files forward to make
     # room, and everything after it has to write to where they ended up.
     flo_edits, flo_done, flo_over = patch_flo(c, d, ui, table)
-    edits += flo_edits
+    edits += stage('flo', flo_edits)
     print('time-travel chart: %d strings in psp/script/tt1.flo' % flo_done)
     if flo_over:
         print('  too long for their field: %s' % flo_over[:4])
     scn_edits, scn_done = patch_scn(c, d, ui, table)
-    edits += scn_edits
+    edits += stage('scn', scn_edits)
     print('choices: %d strings in psp/script/*.scn' % scn_done)
     menu_edits, menu_done, menu_skip = patch_menu(c, d)
-    edits += menu_edits
+    edits += stage('menu', menu_edits)
     print('menu art: %d labels redrawn' % menu_done)
     if menu_skip:
         print('  could not be rebuilt: %s' % menu_skip[:4])
     movie_edits = patch_movie()
     print('opening movie: %d subtitled .pmf' % len(movie_edits))
     lua_edits, lua_done, lua_skip = patch_lua(c, d, table)
-    edits += lua_edits
+    edits += stage('lua', lua_edits)
     print('menu and system messages: %d strings in psp/script/lua' % lua_done)
     if lua_skip:
         print('  too long for their slot: %s' % lua_skip[:5])
