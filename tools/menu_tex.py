@@ -59,6 +59,21 @@ def clip(ind, box):
     return max(x0, 0), max(y0, 0), min(x1, w), min(y1, h)
 
 
+def around(ind, box, band=2):
+    """The commonest index in a ring just outside `box` -- its background."""
+    h, w = ind.shape
+    x0, y0, x1, y1 = box
+    ox0, oy0 = max(x0 - band, 0), max(y0 - band, 0)
+    ox1, oy1 = min(x1 + band, w), min(y1 + band, h)
+    ring = np.concatenate([
+        ind[oy0:y0, ox0:ox1].ravel(), ind[y1:oy1, ox0:ox1].ravel(),
+        ind[y0:y1, ox0:x0].ravel(), ind[y0:y1, x1:ox1].ravel()])
+    if not ring.size:
+        ring = ind[y0:y1, x0:x1].ravel()
+    vals, freq = np.unique(ring, return_counts=True)
+    return vals[freq.argmax()]
+
+
 def draw(ind, pal, box, text, pad=1):
     """Clear the rectangle and centre `text` in it."""
     box = clip(ind, box)
@@ -90,10 +105,11 @@ def draw(ind, pal, box, text, pad=1):
     # Clear to whatever this box's background actually is. Index 0 is the
     # transparent one in the button bar but not everywhere -- on the save
     # screen it is opaque, and clearing to it drew a dark block behind
-    # every label.
-    area = ind[y0:y1, x0:x1]
-    vals, freq = np.unique(area, return_counts=True)
-    ind[y0:y1, x0:x1] = vals[freq.argmax()]
+    # every label. Read it from a ring just outside the box rather than from
+    # the box itself: on the operation-guide sheets the rectangles hug the
+    # lettering, so inside them the commonest colour is the text and clearing
+    # to that painted a solid white slab where the words had been.
+    ind[y0:y1, x0:x1] = around(ind, (x0, y0, x1, y1))
     # At these sizes a stroke is barely a pixel wide and the rasteriser never
     # reaches full coverage, so mapping it straight onto the ramp gave hollow
     # letters. Stretch the coverage so its peak is the ramp's top.
