@@ -88,6 +88,13 @@ LUA_ONLY = frozenset(())
 # of the ones meant to isolate something else. The one build the console ever
 # accepted, the one that left the stream alone, dropped the fonts with it.
 SKIP_FONTS = False
+# CRILAYLA 블롭이 고정된 슬롯보다 짧을 때 남는 자리를 어떻게 채울지.
+#   'front' 압축 스트림 앞에 넣고 comp_len 에 포함 (지난 세션이 만든 형태.
+#           리테일에는 이런 파일이 없다)
+#   'back'  블롭 뒤에 0 을 붙인다 (그 이전 형태)
+#   'none'  채우지 않는다. TOC 가 실제 크기를 말하므로 패딩 자체가 불필요하며
+#           리테일과 같은 모양이 된다. 파일 시작 위치는 그대로다.
+CRILAYLA_PAD = 'none'
 # Re-encrypt the whole install stream with pgdecrypt.exe rather than rewriting
 # its blocks in place. The tool writes a fresh header and key alongside the
 # data; patching blocks under the original header is what the console refused.
@@ -440,11 +447,14 @@ def pin_sizes(c, d, edits):
     for off, blob in edits:
         if off in dead:
             continue
-        if off in room and len(blob) == 4:
+        if off in room and len(blob) == 4 and CRILAYLA_PAD != 'none':
             dropped += 1
             continue
         if off in where and len(blob) < where[off]:
-            blob = fit_crilayla_slot(blob, where[off])
+            if CRILAYLA_PAD == 'front':
+                blob = fit_crilayla_slot(blob, where[off])
+            elif CRILAYLA_PAD == 'back':
+                blob = blob + bytes(where[off] - len(blob))
         out.append((off, blob))
     print('  layout pinned: %d TOC size updates dropped' % dropped)
     if veto:
