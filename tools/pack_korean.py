@@ -372,14 +372,44 @@ def fit_crilayla(blob, limit):
     return best                       # the caller reports it as too big
 
 
+def fit_crilayla_slot(blob, target):
+    """Fill a shorter CRILAYLA blob without leaving bytes after its tail.
+
+    The CPK FileSize is pinned so that no following file moves.  Appending
+    zeroes to a shorter CRILAYLA blob makes the declared compressed length end
+    before the stored file ends.  Our reader ignores that slack, but the PSP
+    CRI decoder expects ``16 + comp_len + 0x100`` to be the complete stored
+    blob.  Extra bytes must therefore be placed *before* the reversed bit
+    stream and included in comp_len; the decoder consumes the original stream
+    from the end and never reaches the leading slack.
+    """
+    if len(blob) >= target:
+        return blob
+    if blob[:8] != b'CRILAYLA' or len(blob) < 16:
+        return blob + bytes(target - len(blob))
+    comp_len = struct.unpack('<I', blob[12:16])[0]
+    comp_end = 16 + comp_len
+    if comp_end + 0x100 != len(blob):
+        # Not a freshly produced canonical blob; retain the conservative
+        # fallback rather than guessing at an already padded layout.
+        return blob + bytes(target - len(blob))
+    pad = target - len(blob)
+    out = bytearray(blob[:16])
+    struct.pack_into('<I', out, 12, comp_len + pad)
+    out += bytes(pad)
+    out += blob[16:]
+    assert len(out) == target
+    return bytes(out)
+
+
 def pin_sizes(c, d, edits):
     """Drop every TOC size update, padding its file back to the room it had.
 
     A file that re-compresses smaller still has to occupy what it occupied:
     a sister project traced this console's C1-2858-3 to an archive whose
-    layout had shifted, and size is part of that layout. The decompressor
-    reads the length from the block header, so the slack at the end is never
-    looked at.
+    layout had shifted, and size is part of that layout. The slack is put at
+    the beginning of CRILAYLA's backwards-read bitstream and included in its
+    compressed length, so no bytes remain after the 0x100-byte raw tail.
     """
     toc = cpk.read_chunk(d, c.header['TocOffset'], b'TOC ')
     base = c.header['TocOffset'] + 24 + toc.rows_off
@@ -414,7 +444,7 @@ def pin_sizes(c, d, edits):
             dropped += 1
             continue
         if off in where and len(blob) < where[off]:
-            blob = blob + bytes(where[off] - len(blob))
+            blob = fit_crilayla_slot(blob, where[off])
         out.append((off, blob))
     print('  layout pinned: %d TOC size updates dropped' % dropped)
     if veto:
@@ -1441,14 +1471,26 @@ def redraw(xi, boxes):
     # table no longer compresses as well as the original once the tiles are
     # renumbered, while the store gains far more than that from Hangul being
     # simpler than kanji.
-    room = t_sz + p_sz
+    # The whole remainder of the fixed-size .xi is available, including the
+    # few bytes of retail padding after the pixel block; the pixel offset must
+    # come out 4-byte aligned, which every retail .xi is and which the console
+    # requires -- an unaligned pixel block is read fine by PPSSPP but faults
+    # the GE on hardware (this is what killed the save screen and the dialogue
+    # fonts). menu_tex.encode carries the same fix for the menu textures.
+    room = len(xi) - 0x58 - t_off
     tnew = _fit_block(newtiles, tblk, room)
     pnew = _fit_block(newpix, pblk, room)
-    if tnew is None or pnew is None or len(tnew) + len(pnew) > room:
+    new_p_off = gap = None
+    if tnew is not None:
+        new_p_off = (t_off + len(tnew) + 3) & ~3
+        gap = new_p_off - (t_off + len(tnew))
+    if (tnew is None or pnew is None
+            or len(tnew) + gap + len(pnew) > room):
         # The small auxiliary fonts have no room for a renumbered table.
         # Write back through the tiles they already have instead: pixels in
         # blank or shared chunks are lost, but those fonts only carry the
-        # guide and staff-roll text and this is how they shipped before.
+        # guide and staff-roll text and this is how they shipped before. The
+        # retail p_off is used unchanged, so it stays aligned.
         for i, t in enumerate(idx):
             if t != 0xFFFF:
                 pix[t * 32:t * 32 + 32] = sw2[i * 32:i * 32 + 32]
@@ -1462,9 +1504,11 @@ def redraw(xi, boxes):
         return bytes(out)
     out = bytearray(xi)
     out[0x58 + t_off:0x58 + t_off + room] = (
-        tnew + pnew + bytes(room - len(tnew) - len(pnew)))
-    struct.pack_into('<IIII', out, 0x40, t_off, len(tnew),
-                     t_off + len(tnew), room - len(tnew))
+        tnew + bytes(gap) + pnew
+        + bytes(room - len(tnew) - gap - len(pnew)))
+    struct.pack_into('<IIII', out, 0x40, t_off, len(tnew), new_p_off, len(pnew))
+    assert new_p_off % 4 == 0 and 0x58 + new_p_off + len(pnew) <= len(out), \
+        'atlas pixel block misaligned or overruns the .xi'
     return bytes(out)
 
 

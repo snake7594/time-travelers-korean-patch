@@ -204,7 +204,11 @@ def encode(xi, ind):
         table.append(store[c])
     tiles = struct.pack('<%dH' % len(table), *table)
     pix = b''.join(store)
-    room = t_sz + p_sz
+    # Use the whole remainder of the fixed-size .xi subfile.  A few retail
+    # images have 2--4 bytes of padding after the pixel block; those bytes are
+    # part of the slot and are needed when the aligned pixel offset moves
+    # forward.
+    room = len(xi) - 0x58 - t_off
     was_t = xi[0x58 + t_off:0x58 + t_off + t_sz]
     was_p = xi[0x58 + p_off:0x58 + p_off + p_sz]
 
@@ -222,10 +226,25 @@ def encode(xi, ind):
             print('    compression %d -> %d; the console may refuse it'
                   % (orig[0] & 7, blk[0] & 7))
             return None
+    new_p_off = (t_off + len(a) + 3) & ~3
+    gap = new_p_off - (t_off + len(a))
+    # navi.xa has no trailing padding.  If preserving its old pixel block
+    # would make the alignment pad overflow the slot, rebuild that block in
+    # the same compression method with a fresh tree; the decoded pixels stay
+    # identical while the block becomes smaller.
+    if len(a) + gap + len(b) > room and b == was_p:
+        tighter = _fit(imgp8.l5_decompress(was_p), was_p, room)
+        if tighter is not None:
+            b = tighter
+    if len(a) + gap + len(b) > room:
+        return None
     out = bytearray(xi)
-    out[0x58 + t_off:0x58 + t_off + room] = a + b + bytes(room - len(a) - len(b))
-    struct.pack_into('<IIII', out, 0x40, t_off, len(a), t_off + len(a),
-                     room - len(a))
+    out[0x58 + t_off:0x58 + t_off + room] = (
+        a + bytes(gap) + b + bytes(room - len(a) - gap - len(b)))
+    struct.pack_into('<IIII', out, 0x40, t_off, len(a), new_p_off,
+                     len(b))
+    assert new_p_off % 4 == 0 and 0x58 + new_p_off + len(b) <= len(out), \
+        'menu texture pixel block misaligned or overruns the .xi'
     return bytes(out)
 
 
