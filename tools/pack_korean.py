@@ -43,7 +43,7 @@ HARDWARE_SAFE_EBOOT = False
 # fixed it by replacing every file where it already lay. This build holds that
 # line: a file that would outgrow its slot is left in Japanese rather than
 # repacked somewhere else.
-KEEP_LAYOUT = True
+KEEP_LAYOUT = False
 # Diagnostic: leave the PGD-encrypted install stream completely alone. The
 # emulator decrypts PGD in software, the console does it in the KIRK engine,
 # so a re-encryption that satisfies one need not satisfy the other -- and the
