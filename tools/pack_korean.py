@@ -218,6 +218,7 @@ def patch_cfg(c, d, ui, table):
         # is compatible with the pinned layout: what comes out still has to
         # fit the slot below, and pin_sizes refuses anything that does not.
         cfg = cfgbin.parse(data)
+        blob = None
         if cfg is not None:
             rebuilt = [s for _, s in cfg.strs]
             at, cur = cfg.index(), base - cfg.base
@@ -226,8 +227,18 @@ def patch_cfg(c, d, ui, table):
                 if j is not None:
                     rebuilt[j] = new[i]
                 cur += len(s) + 1
-            blob = cfg.pack(rebuilt)
-        else:
+            cand = cfg.pack(rebuilt)
+            # A rebuilt file may only shrink. staffroll_ja.cfg.bin comes out
+            # 1008 bytes longer than it shipped, and the reader has already
+            # sized its buffer from the original; keeping each string in the
+            # slot it had, trimmed, is the safe answer even though it costs
+            # the tail of the longest lines.
+            if len(cand) <= len(data):
+                blob = cand
+            else:
+                print('  %s would grow %d bytes; kept in its own slots'
+                      % (e['name'], len(cand) - len(data)))
+        if blob is None:
             for i in range(len(new)):
                 while len(new[i]) > len(strs[i]):
                     new[i] = new[i].decode(ENC)[:-1].encode(ENC)
@@ -1127,19 +1138,31 @@ def full_stops(text):
                    for p in _TAG.split(text))
 
 
+_CTRL = re.compile(r'(:[a-zA-Z_]+=[^:]*)')
+
+
 def recode(text, table):
-    """Hangul -> assigned kanji, then CP932 bytes."""
-    text = full_stops(text)
-    for a, b in PUNCT.items():
-        if a in text:
-            text = text.replace(a, b)
-    for a, b in FIXUP.items():
-        if a in text:
-            text = text.replace(a, b)
+    """Hangul -> assigned kanji, then CP932 bytes.
+
+    A `:texture=`, `:model=` or `:movie=` run carries a resource path and its
+    coordinates, so the punctuation pass has to stay out of it: turning the
+    dot of tip0040.xa into a full-width one leaves the game looking for a file
+    that is not there, and it stops. normalize() already protects these; this
+    is the same protection one stage later.
+    """
     out = []
-    for ch in text:
-        g = table.get(ch)
-        out.append(chr(g) if g else ch)
+    for i, seg in enumerate(_CTRL.split(text)):
+        if i % 2:                       # the tag itself -- leave it alone
+            out.append(seg)
+            continue
+        seg = full_stops(seg)
+        for a, b in PUNCT.items():
+            if a in seg:
+                seg = seg.replace(a, b)
+        for a, b in FIXUP.items():
+            if a in seg:
+                seg = seg.replace(a, b)
+        out.append(''.join(chr(table[c]) if c in table else c for c in seg))
     return ''.join(out).encode(ENC)
 
 
