@@ -2,7 +2,7 @@
  "schema": "tt1-ui/1",
  "source": "psp/script/tt1.flo",
  "note": "time-travel chart nodes and telops; written back in place",
- "count": 384,
+ "count": 385,
  "entries": [
   {
    "id": "flo#0",
@@ -2691,6 +2691,13 @@
    "room": 41,
    "ja": "２０４９[年/ねん]４[月/がつ]２８[日/にち]",
    "ko": "2049년 4월 28일"
+  },
+  {
+   "id": "flo#auto-branch",
+   "uses": 98,
+   "room": 8,
+   "ja": "自動分岐",
+   "ko": "분기점"
   }
  ]
 }

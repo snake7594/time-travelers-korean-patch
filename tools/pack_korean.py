@@ -599,7 +599,12 @@ def patch_flo(c, d, ui, table):
     e = [x for x in c.files if x['name'] == 'tt1.flo'][0]
     data = bytearray(c.read(e))
     done, over = 0, []
-    for a, b, ja in sorted(extract_flo.spans(bytes(data)), key=lambda r: -r[0]):
+    # jp_only would skip any field written in kanji alone -- the chart's
+    # automatic-branch label is one of those and appears 98 times, so it
+    # stayed Japanese and drew as garbage once its kanji were re-pointed.
+    # Only fields the table names are touched, so widening this is safe.
+    for a, b, ja in sorted(extract_flo.spans(bytes(data), jp_only=False),
+                           key=lambda r: -r[0]):
         if ja not in ko:
             continue
         try:
